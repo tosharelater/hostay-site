@@ -1,0 +1,328 @@
+/*
+ * Hostay, calm editorial direction (after Guildmere): pale blue-white page, quiet greys,
+ * deep indigo ink, one indigo accent. Serif display, system sans body, dotted guide rails.
+ */
+:root {
+  /* the guide character's size; sections leave him a slot of this size at the bottom centre */
+  --guide-w: clamp(220px, (100svh - 540px) * 1.07, 360px);
+  --guide-h: calc(var(--guide-w) * 560 / 600);
+  /* Surfaces */
+  --page: #ecf1fa;
+  --panel: #f2f6fd;
+  --white: #fbfcff;
+  --rule: #d7deec;
+  --line: #b7becb;
+  --dot: #d2d9e6;
+
+  /* Ink */
+  --ink: #171a3a;
+  --ink-soft: #404755;
+  --muted: #5d6474;
+
+  /* Accent: Hostay indigo */
+  --accent: #4b4fc4;
+  --accent-deep: #34379a;
+  --accent-soft: #dcdff7;
+  --accent-line: #a9adf0;
+
+  /* Illustration palette (flat fills, dark outline) */
+  --il-stroke: #1d2140;
+  --il-indigo: #7a80e8;
+  --il-indigo-2: #c9ccf6;
+  --il-amber: #f0b46e;
+  --il-amber-2: #f7d6a8;
+  --il-slate: #9aa1b3;
+  --il-slate-2: #c4cad7;
+  --il-slate-3: #e3e7ef;
+  --il-cream: #f8f3e8;
+  --il-sage: #8fbfa9;
+
+  --sans: -apple-system, 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', system-ui, sans-serif;
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', ui-serif, Georgia, serif;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --wrap: 1120px;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 88px;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 400 16px/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:where(a, button, input, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: fixed;
+  z-index: 100;
+  top: 12px;
+  left: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 14px;
+  transform: translateY(-150%);
+  transition: transform 0.3s var(--ease);
+}
+
+.skip:focus-visible {
+  transform: none;
+}
+
+.wrap {
+  width: min(var(--wrap), 100%);
+  margin-inline: auto;
+}
+
+/* Section scaffolding */
+.sec {
+  position: relative;
+  padding: clamp(80px, 11vw, 136px) var(--gutter);
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--accent);
+  font: 600 12px/1 var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.h2 {
+  font-size: clamp(32px, 4.2vw, 50px);
+  line-height: 1.08;
+}
+
+.lede {
+  max-width: 560px;
+  margin-top: 16px;
+  color: var(--ink-soft);
+  font-size: 16.5px;
+  line-height: 1.6;
+}
+
+.center {
+  text-align: center;
+}
+
+.center .lede {
+  margin-inline: auto;
+}
+
+/* Quiet buttons, as in the reference */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.35s var(--ease);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-solid {
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  color: var(--accent-deep);
+}
+
+.btn-solid:hover {
+  background: #cfd3f5;
+}
+
+/* Outline with its fill offset to the bottom-right; the outline is drawn above the fill,
+   which slides home on hover. */
+.btn-offset {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--accent-deep);
+}
+
+.btn-offset::before,
+.btn-offset::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.btn-offset::before {
+  z-index: -2;
+  background: var(--accent-soft);
+  translate: 5px 5px;
+  transition: translate 0.3s var(--ease);
+}
+
+.btn-offset::after {
+  z-index: -1;
+  border: 1px solid var(--accent-deep);
+}
+
+.btn-offset:hover {
+  transform: none;
+}
+
+.btn-offset:hover::before,
+.btn-offset:focus-visible::before {
+  translate: 0 0;
+}
+
+.btn-offset:active::before {
+  translate: 1px 1px;
+}
+
+.btn-ink {
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  color: var(--white);
+}
+
+.btn-ink:hover {
+  background: #262a52;
+}
+
+.btn-ghost {
+  border: 1px dashed var(--line);
+  color: var(--ink-soft);
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  border-style: solid;
+  background: var(--panel);
+}
+
+/* Reveal on scroll (scripts/motion.ts adds .in) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+
+[data-reveal].in {
+  opacity: 1;
+  transform: none;
+}
+
+html.no-js [data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 860px) {
+  :root {
+    --guide-w: min(44vw, 180px);
+  }
+}
+
+/* Below-the-fold sections that are not pinned: let the browser skip them until they are near. */
+.who,
+.faq,
+.notify,
+.product,
+.foot {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}

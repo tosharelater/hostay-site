@@ -1,0 +1,77 @@
+---
+/** The whole home page for one locale: SEO head, sections in order, and the motion script. */
+import '../styles/global.css';
+import { href, abs } from '../lib/paths';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Untangle from './Untangle.astro';
+import Modules from './Modules.astro';
+import How from './How.astro';
+import Day from './Day.astro';
+import Product from './Product.astro';
+import Who from './Who.astro';
+import Morocco from './Morocco.astro';
+import Faq from './Faq.astro';
+import Notify from './Notify.astro';
+import Footer from './Footer.astro';
+import Guide from './Guide.astro';
+import Miftah from './Miftah.astro';
+import { dict, META, LOCALES, type Locale } from '../i18n';
+import { jsonLd } from '../lib/seo';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale);
+const canonical = abs(META[locale].home);
+const ogImage = abs('/og.png');
+---
+
+<!doctype html>
+<html lang={META[locale].lang} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{t.meta.title}</title>
+    <meta name="description" content={t.meta.description} />
+    <link rel="canonical" href={canonical} />
+    {LOCALES.map((l) => <link rel="alternate" hreflang={META[l].lang} href={abs(META[l].home)} />)}
+    <link rel="alternate" hreflang="x-default" href={abs(META.fr.home)} />
+    <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
+    <meta name="theme-color" content="#ecf1fa" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Hostay" />
+    <meta property="og:title" content={t.meta.title} />
+    <meta property="og:description" content={t.meta.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={META[locale].og} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="text/html" href={abs(META[locale].text)} title={t.text.label} />
+    <script type="application/ld+json" set:html={jsonLd(locale)} />
+    <script is:inline>document.documentElement.classList.remove('no-js');</script>
+  </head>
+  <body>
+    <a class="skip" href="#main">{t.a11y.skip}</a>
+    <Header locale={locale} />
+    <Guide locale={locale} />
+    <main id="main" tabindex="-1">
+      <Hero locale={locale} />
+      <Untangle locale={locale} />
+      <Modules locale={locale} />
+      <How locale={locale} />
+      <Day locale={locale} />
+      <Product locale={locale} />
+      <Who locale={locale} />
+      <Morocco locale={locale} />
+      <Faq locale={locale} />
+      <Notify locale={locale} />
+    </main>
+    <Footer locale={locale} />
+    <Miftah locale={locale} />
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

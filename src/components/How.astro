@@ -1,0 +1,435 @@
+---
+/**
+ * How it works, as a "getting started" checklist: three collapsible steps with a progress bar.
+ * The section stays pinned while scrolling ticks the steps off one by one, slowly
+ * (scripts/motion.ts); each step also opens on click.
+ * A small burst of confetti marks the last one.
+ */
+import { dict, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale).how;
+const confetti = Array.from({ length: 14 }, (_, i) => ({
+  x: (i * 37) % 100,
+  r: (i * 53) % 360,
+  d: (i % 5) * 60,
+  shape: ['dot', 'strip', 'tri'][i % 3],
+  tone: ['indigo', 'amber', 'sage', 'indigo-2'][i % 4]
+}));
+---
+
+<section class="how" id="how" aria-labelledby="how-title" data-how>
+  <div class="pin">
+  <div class="wrap layout">
+    <div class="intro" data-reveal>
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h2 class="h2" id="how-title">{t.title}</h2>
+      <p class="lede">{t.lead}</p>
+    </div>
+
+    <div class="setup" data-setup data-reveal style="--d:120ms">
+      <header class="top">
+        <div>
+          <p class="card-title">{t.card}</p>
+          <p class="count"><span data-count>0</span>/{t.steps.length} {t.done}</p>
+        </div>
+        <span class="bar" aria-hidden="true"><i data-progress></i></span>
+      </header>
+
+      <ol class="steps">
+        {
+          t.steps.map((s, i) => (
+            <li class="step" data-step>
+              <h3>
+                <button type="button" class="row" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`how-panel-${i}`} id={`how-step-${i}`} data-step-toggle>
+                  <span class="check" aria-hidden="true" />
+                  <span class="num">0{i + 1}</span>
+                  <span class="name">{s.title}</span>
+                  <span class="chev" aria-hidden="true" />
+                </button>
+              </h3>
+              <div class="panel" id={`how-panel-${i}`} role="region" aria-labelledby={`how-step-${i}`} data-panel>
+                <div class="inner">
+                  <p>{s.body}</p>
+                  <ul class="chips">
+                    {s.items.map((item, j) => (
+                      <li style={`--d:${j * 90}ms`}>
+                        <i aria-hidden="true" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="confetti" aria-hidden="true">
+        {confetti.map((c) => <i class:list={[c.shape, c.tone]} style={`--x:${c.x}%;--r:${c.r}deg;--d:${c.d}ms`} />)}
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<script>
+  // Clicking a step opens it (and closes the others); from then on scrolling no longer drives it.
+  const setup = document.querySelector<HTMLElement>('[data-setup]');
+  setup?.querySelectorAll<HTMLButtonElement>('[data-step-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      setup.dataset.manual = 'true';
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      setup.querySelectorAll<HTMLButtonElement>('[data-step-toggle]').forEach((b) => b.setAttribute('aria-expanded', String(b === btn && open)));
+    });
+  });
+</script>
+
+<style>
+  .how {
+    height: 210vh;
+    background: var(--panel);
+    border-block: 1px solid var(--rule);
+  }
+
+  .pin {
+    position: sticky;
+    top: 0;
+    display: grid;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 88px var(--gutter) 32px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 56px;
+    align-items: center;
+  }
+
+  .setup {
+    position: relative;
+    padding: 22px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 18px;
+    background: var(--white);
+    box-shadow: 7px 7px 0 var(--accent-soft);
+  }
+
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 14px;
+    padding: 4px 4px 18px;
+    border-bottom: 1px dashed var(--rule);
+  }
+
+  .card-title {
+    color: var(--ink);
+    font: 400 22px/1.2 var(--serif);
+  }
+
+  .count {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .count span {
+    color: var(--accent-deep);
+    font-weight: 700;
+  }
+
+  .bar {
+    flex: 1 1 160px;
+    max-width: 240px;
+    height: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--il-slate-3);
+  }
+
+  .bar i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--il-indigo), var(--accent));
+    transform-origin: left;
+    scale: var(--done, 0) 1;
+    transition: scale 0.6s var(--ease);
+  }
+
+  .steps {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .step + .step {
+    border-top: 1px solid var(--rule);
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 16px 6px;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .check {
+    position: relative;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border: 1.5px solid var(--line);
+    border-radius: 50%;
+    transition:
+      background-color 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  .check::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 11px;
+    border: solid var(--white);
+    border-width: 0 2px 2px 0;
+    rotate: 45deg;
+    scale: 0;
+    transition: scale 0.35s var(--ease);
+  }
+
+  .step:global(.done) .check {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .step:global(.done) .check::after {
+    scale: 1;
+  }
+
+  .num {
+    color: var(--accent);
+    font: italic 400 15px/1 var(--serif);
+  }
+
+  .name {
+    flex: 1;
+    font: 400 21px/1.2 var(--serif);
+  }
+
+  .step:global(.done) .name {
+    color: var(--ink-soft);
+  }
+
+  .chev {
+    width: 9px;
+    height: 9px;
+    margin-right: 6px;
+    border: solid var(--ink-soft);
+    border-width: 0 1.5px 1.5px 0;
+    rotate: 45deg;
+    translate: 0 -3px;
+    transition: rotate 0.35s var(--ease);
+  }
+
+  .row[aria-expanded='true'] .chev {
+    rotate: 225deg;
+    translate: 0 2px;
+  }
+
+  /* collapsible panel: grid-rows 0fr → 1fr animates the height */
+  .panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s var(--ease);
+  }
+
+  h3:has(.row[aria-expanded='true']) + .panel {
+    grid-template-rows: 1fr;
+  }
+
+  .inner {
+    overflow: hidden;
+  }
+
+  .inner p {
+    max-width: 520px;
+    padding: 0 6px 0 54px;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 18px;
+    padding: 0 6px 0 54px;
+    list-style: none;
+  }
+
+  .chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .chips i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--il-sage);
+    box-shadow: 0 0 0 3px #dcefe6;
+  }
+
+  /* confetti burst when the last step is ticked */
+  .confetti {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .confetti i {
+    position: absolute;
+    left: var(--x);
+    top: 0;
+    opacity: 0;
+    rotate: var(--r);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .strip {
+    width: 12px;
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  .tri {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 9px solid currentColor;
+  }
+
+  .indigo {
+    background-color: var(--il-indigo);
+    color: var(--il-indigo);
+  }
+
+  .amber {
+    background-color: var(--il-amber);
+    color: var(--il-amber);
+  }
+
+  .sage {
+    background-color: var(--il-sage);
+    color: var(--il-sage);
+  }
+
+  .indigo-2 {
+    background-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .tri.indigo,
+  .tri.amber,
+  .tri.sage,
+  .tri.indigo-2 {
+    background-color: transparent;
+  }
+
+  .setup:global(.celebrate) .confetti i {
+    animation: burst 1.3s var(--ease) both;
+    animation-delay: var(--d);
+  }
+
+  @keyframes burst {
+    0% {
+      opacity: 0;
+      translate: 0 20px;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      translate: 0 -90px;
+      rotate: calc(var(--r) + 220deg);
+    }
+  }
+
+  @media (max-width: 900px) {
+    /* phones: no pinning, the steps tick off as the card scrolls by */
+    .how {
+      height: auto;
+    }
+
+    .pin {
+      position: static;
+      min-height: 0;
+      padding-block: 72px;
+    }
+
+    .layout {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+
+    .setup {
+      padding: 16px;
+    }
+
+    .inner p,
+    .chips {
+      padding-left: 6px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .how {
+      height: auto;
+    }
+
+    .pin {
+      position: static;
+    }
+
+    .setup:global(.celebrate) .confetti i {
+      animation: none;
+    }
+  }
+</style>

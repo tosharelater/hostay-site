@@ -1,0 +1,889 @@
+---
+/**
+ * Miftah, the Hostay assistant (demo). A fixed "Miftah is listening" button appears once the
+ * guide has told his story; it opens a full-screen white chat: a phone on one side, Miftah
+ * standing on the other. He listens while you type and thinks (hand on chin) while the answer
+ * "loads". The answers are prepared in advance from the site's own copy and matched by keywords;
+ * the chat says so plainly. Nothing is sent anywhere.
+ */
+import Logo from './Logo.astro';
+import { dict, type Locale } from '../i18n';
+import * as C from '../lib/character';
+import { mouthAt } from '../lib/untangle';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale).miftah;
+---
+
+<button type="button" class="fab" data-miftah-fab aria-haspopup="dialog" aria-controls="miftah" aria-label={t.open}>
+  <span class="face" aria-hidden="true">
+    <svg viewBox="150 70 300 360">
+      <path class="skin" d={C.HEAD} />
+      <path class="beard" d={C.BEARD} />
+      <path class="hair" d={C.HAIR} />
+      {C.EYES.map(([cx, cy]) => <circle class="ink" cx={cx} cy={cy + 1} r="7" />)}
+      {C.LENSES.map((l) => <rect class="lens" x={l.x} y={l.y} width="56" height="38" rx="13" />)}
+      <path class="moustache" d={C.MOUSTACHE} />
+    </svg>
+  </span>
+  <span class="fab-text"><i class="live" aria-hidden="true"></i>{t.listening}</span>
+</button>
+
+<div class="overlay" id="miftah" role="dialog" aria-modal="true" aria-labelledby="miftah-title" data-miftah hidden data-answers={JSON.stringify(t.answers)}>
+  <button type="button" class="close" data-miftah-close aria-label={t.close}><span aria-hidden="true">×</span></button>
+
+  <div class="room">
+    <!-- the phone -->
+    <section class="phone" aria-labelledby="miftah-title">
+      <header class="bar">
+        <span class="avatar" aria-hidden="true"><Logo size={16} /></span>
+        <span class="who">
+          <b id="miftah-title">{t.title}</b>
+          <small>{t.subtitle}</small>
+        </span>
+        <span class="demo">{t.demo}</span>
+      </header>
+      <ol class="msgs" data-msgs aria-live="polite">
+        <li class="msg bot">{t.greeting}</li>
+      </ol>
+      <div class="chips" data-chips>
+        {t.suggestions.map((q) => <button type="button" class="chip" data-chip>{q}</button>)}
+      </div>
+      <form class="composer" data-composer>
+        <label class="sr-only" for="miftah-input">{t.placeholder}</label>
+        <input id="miftah-input" name="q" type="text" autocomplete="off" maxlength="300" placeholder={t.placeholder} data-input />
+        <button type="submit" class="send" aria-label={t.send}>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10 L17 3 L13 17 L10 11 Z" /></svg>
+        </button>
+      </form>
+      <p class="note">{t.demoNote}</p>
+    </section>
+
+    <!-- Miftah himself -->
+    <figure class="stand" data-figure aria-hidden="true">
+      <div class="thinking-bubble"><i></i><i></i><i></i></div>
+      <svg viewBox={`0 0 ${C.PW} ${C.FULL_H}`}>
+        <ellipse class="floor" cx="300" cy="1146" rx="230" ry="16" />
+        {C.TROUSERS.map((d) => <path class="trousers" d={d} />)}
+        {C.SHOES.map((d) => <path class="shoe" d={d} />)}
+        <path class="jacket" d={C.FULL_JACKET} />
+        <path class="shirtw" d={C.FULL_SHIRT_V} />
+        <path class="tie" d={C.FULL_TIE} />
+        <path class="tie" d={C.TIE_KNOT} />
+        {C.SHIRT_COLLAR.map((d) => <path class="shirtw" d={d} />)}
+        {C.FULL_LAPELS.map((d) => <path class="lapel" d={d} />)}
+        <path class="shirtw" d={C.POCKET} />
+        {C.BUTTONS.map(([cx, cy]) => <circle class="button" cx={cx} cy={cy} r="7" />)}
+        <path class="line" d="M114 784 L300 806 L486 784" />
+
+        <!-- arms: at rest, or his right hand on his chin while thinking -->
+        <g class="arm-rest">
+          {
+            C.ARM_DOWN.map((a) => (
+              <g>
+                <path class="jacket" d={a.sleeve} />
+                <path class="shirtw" d={a.cuff} />
+                <ellipse class="skin" cx={a.hand[0]} cy={a.hand[1]} rx="22" ry="26" />
+              </g>
+            ))
+          }
+        </g>
+        <g class="arm-left">
+          <path class="jacket" d={C.ARM_DOWN[1]!.sleeve} />
+          <path class="shirtw" d={C.ARM_DOWN[1]!.cuff} />
+          <ellipse class="skin" cx={C.ARM_DOWN[1]!.hand[0]} cy={C.ARM_DOWN[1]!.hand[1]} rx="22" ry="26" />
+        </g>
+
+        <path class="skin" d={C.NECK} />
+        <g class="head">
+          {C.EARS.map(([cx, cy]) => <ellipse class="skin" cx={cx} cy={cy} rx="12" ry="24" />)}
+          <path class="skin" d={C.HEAD} />
+          <path class="beard" d={C.BEARD} />
+          <path class="hair" d={C.HAIR} />
+          {C.TEMPLES.map((d) => <path class="grey" d={d} />)}
+          <path class="line part" d={C.PART} />
+          {C.BROWS.map((d, i) => <path class:list={['line', 'brow', i ? 'brow-r' : 'brow-l']} d={d} />)}
+          {C.EYES.map(([cx, cy]) => <ellipse class="eye" cx={cx} cy={cy} rx="12" ry="9" />)}
+          <g class="pupils">{C.EYES.map(([cx, cy]) => <circle class="ink" cx={cx} cy={cy + 1} r="5" />)}</g>
+          {C.LENSES.map((l) => <rect class="lens" x={l.x} y={l.y} width="56" height="38" rx="13" />)}
+          <path class="line" d={C.BRIDGE} />
+          {C.GLASS_ARMS.map((d) => <path class="line" d={d} />)}
+          <path class="line" d={C.NOSE} />
+          {C.CHEEKS.map(([cx, cy]) => <ellipse class="cheek" cx={cx} cy={cy} rx="13" ry="7" />)}
+          <path class="moustache" d={C.MOUSTACHE} />
+          <path class="line mouth" d={mouthAt(0, 1)} />
+          <ellipse class="mouth-open" cx="300" cy="352" rx="14" ry="10" />
+        </g>
+
+        <g class="arm-think">
+          <path class="jacket" d={C.THINK_UPPER} />
+          <path class="jacket" d={C.THINK_FORE} />
+          <path class="shirtw" d={C.THINK_CUFF} />
+          <ellipse class="skin" cx={C.THINK_HAND[0]} cy={C.THINK_HAND[1]} rx="26" ry="22" />
+        </g>
+      </svg>
+      <figcaption class="status" data-status data-thinking={t.thinking}></figcaption>
+    </figure>
+  </div>
+</div>
+
+<script>
+  type Answers = Record<string, string>;
+  const fab = document.querySelector<HTMLButtonElement>('[data-miftah-fab]');
+  const box = document.querySelector<HTMLElement>('[data-miftah]');
+  if (fab && box) {
+    const close = box.querySelector<HTMLButtonElement>('[data-miftah-close]')!;
+    const msgs = box.querySelector<HTMLOListElement>('[data-msgs]')!;
+    const form = box.querySelector<HTMLFormElement>('[data-composer]')!;
+    const input = box.querySelector<HTMLInputElement>('[data-input]')!;
+    const figure = box.querySelector<HTMLElement>('[data-figure]')!;
+    const status = box.querySelector<HTMLElement>('[data-status]')!;
+    const answers: Answers = JSON.parse(box.dataset.answers ?? '{}');
+    let busy = false;
+    let talk = 0;
+
+    // Keywords per answer (accents stripped, lower case), French and English together.
+    const topics: [string, string[]][] = [
+      ['price', ['prix', 'tarif', 'cout', 'abonnement', 'price', 'pricing', 'cost', 'subscription']],
+      ['launch', ['quand', 'disponible', 'lancement', 'sortie', 'when', 'available', 'launch', 'release']],
+      ['access', ['acces', 'serrure', 'tuya', 'cle', 'clim', 'capteur', 'lock', 'key', 'access', 'sensor', 'air conditioning']],
+      ['operations', ['menage', 'check', 'intervention', 'equipe', 'tache', 'cleaning', 'maintenance', 'team', 'task']],
+      ['guests', ['voyageur', 'guest', 'identite', 'passeport', 'guide', 'espace']],
+      ['reservations', ['ical', 'calendrier', 'reservation', 'planning', 'booking', 'calendar', 'schedule', 'airbnb']],
+      ['owners', ['proprietaire', 'owner', 'rapport', 'report', 'visibilite', 'visibility']],
+      ['size', ['combien', 'logements', 'portefeuille', 'portfolio', 'how many', 'properties']],
+      ['morocco', ['maroc', 'morocco', 'ville', 'city', 'tanger', 'tangier', 'agadir', 'marrakech', 'casablanca']],
+      ['hello', ['bonjour', 'salut', 'salam', 'coucou', 'hello', 'hi', 'hey']]
+    ];
+    const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const answerFor = (q: string) => {
+      const n = ` ${norm(q)} `;
+      for (const [key, words] of topics) if (words.some((w) => n.includes(w.length <= 3 ? ` ${w} ` : w))) return answers[key] ?? '';
+      return answers.fallback ?? '';
+    };
+
+    const add = (text: string, who: 'me' | 'bot') => {
+      const li = document.createElement('li');
+      li.className = `msg ${who}`;
+      li.textContent = text;
+      msgs.append(li);
+      msgs.scrollTop = msgs.scrollHeight;
+      return li;
+    };
+
+    const ask = (q: string) => {
+      const text = q.trim().slice(0, 300);
+      if (!text || busy) return;
+      busy = true;
+      add(text, 'me');
+      input.value = '';
+      figure.dataset.state = 'thinking';
+      status.textContent = status.dataset.thinking ?? '';
+      const typing = add('', 'bot');
+      typing.classList.add('typing');
+      typing.innerHTML = '<i></i><i></i><i></i>';
+      window.setTimeout(() => {
+        typing.remove();
+        status.textContent = '';
+        figure.dataset.state = 'talking';
+        const reply = answerFor(text);
+        const li = add('', 'bot');
+        // the answer appears word by word while he talks
+        const words = reply.split(' ');
+        let i = 0;
+        clearInterval(talk);
+        talk = window.setInterval(() => {
+          li.textContent = words.slice(0, ++i).join(' ');
+          msgs.scrollTop = msgs.scrollHeight;
+          if (i >= words.length) {
+            clearInterval(talk);
+            figure.dataset.state = '';
+            busy = false;
+          }
+        }, 45);
+      }, 1100 + Math.random() * 900);
+    };
+
+    let lastFocus: HTMLElement | null = null;
+    const open = () => {
+      lastFocus = document.activeElement as HTMLElement;
+      box.hidden = false;
+      document.documentElement.classList.add('miftah-open');
+      requestAnimationFrame(() => box.classList.add('on'));
+      input.focus();
+    };
+    const shut = () => {
+      box.classList.remove('on');
+      document.documentElement.classList.remove('miftah-open');
+      window.setTimeout(() => (box.hidden = true), 300);
+      lastFocus?.focus();
+    };
+
+    fab.addEventListener('click', open);
+    close.addEventListener('click', shut);
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') shut();
+      if (e.key !== 'Tab') return;
+      // keep focus inside the dialog
+      const f = [...box.querySelectorAll<HTMLElement>('button, input')].filter((el) => !el.hasAttribute('disabled'));
+      const first = f[0];
+      const last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last?.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first?.focus();
+      }
+    });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      ask(input.value);
+    });
+    box.querySelectorAll<HTMLButtonElement>('[data-chip]').forEach((c) => c.addEventListener('click', () => ask(c.textContent ?? '')));
+    // While the visitor types, he leans in to listen.
+    input.addEventListener('input', () => {
+      if (!busy) figure.dataset.state = input.value ? 'listening' : '';
+    });
+  }
+</script>
+
+<style>
+  /* ---------- the fixed button ---------- */
+  .fab {
+    position: fixed;
+    right: max(16px, calc(50% - 680px));
+    bottom: 22px;
+    z-index: 45;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 16px 6px 6px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--ink);
+    font: 600 14px/1 var(--sans);
+    box-shadow: 4px 4px 0 var(--accent-soft);
+    cursor: pointer;
+    opacity: 0;
+    translate: 0 24px;
+    pointer-events: none;
+    transition:
+      opacity 0.4s ease,
+      translate 0.5s var(--ease),
+      box-shadow 0.25s ease;
+  }
+
+  .fab:global(.show) {
+    opacity: 1;
+    translate: 0 0;
+    pointer-events: auto;
+  }
+
+  .fab:hover {
+    box-shadow: 6px 6px 0 var(--accent-line);
+  }
+
+  :global(html.miftah-open) .fab {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .face {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 50%;
+    background: var(--accent-soft);
+  }
+
+  .face svg {
+    width: 34px;
+    margin-top: 6px;
+  }
+
+  .fab-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .live {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--il-sage);
+    box-shadow: 0 0 0 0 rgba(143, 191, 169, 0.6);
+    animation: live 1.8s ease-out infinite;
+  }
+
+  @keyframes live {
+    to {
+      box-shadow: 0 0 0 8px rgba(143, 191, 169, 0);
+    }
+  }
+
+  /* ---------- the room ---------- */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: var(--white);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .overlay:global(.on) {
+    opacity: 1;
+  }
+
+  :global(html.miftah-open) {
+    overflow: hidden;
+  }
+
+  .close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--ink);
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .room {
+    display: grid;
+    grid-template-columns: minmax(0, 400px) minmax(0, 420px);
+    gap: clamp(24px, 6vw, 96px);
+    align-items: center;
+    width: min(1000px, 100%);
+    height: min(760px, 100%);
+  }
+
+  /* the phone */
+  .phone {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 760px;
+    overflow: hidden;
+    border: 2px solid var(--il-stroke);
+    border-radius: 40px;
+    background: var(--panel);
+    box-shadow:
+      0 0 0 8px var(--white),
+      0 0 0 9.5px var(--il-stroke),
+      10px 14px 0 9px var(--accent-soft);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 22px 18px 14px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--white);
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .who {
+    display: grid;
+    flex: 1;
+    gap: 2px;
+  }
+
+  .who b {
+    font: 400 18px/1 var(--serif);
+  }
+
+  .who small {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .demo {
+    padding: 4px 9px;
+    border: 1px solid var(--accent-line);
+    border-radius: 999px;
+    color: var(--accent-deep);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .msgs {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 18px 16px;
+    overflow-y: auto;
+    list-style: none;
+  }
+
+  .msgs :global(.msg) {
+    max-width: 84%;
+    padding: 10px 13px;
+    border-radius: 16px;
+    font-size: 14.5px;
+    line-height: 1.45;
+    animation: in 0.3s var(--ease) both;
+  }
+
+  .msgs :global(.bot) {
+    align-self: flex-start;
+    border: 1px solid var(--rule);
+    border-bottom-left-radius: 4px;
+    background: var(--white);
+    color: var(--ink);
+  }
+
+  .msgs :global(.me) {
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    background: var(--accent);
+    color: var(--white);
+  }
+
+  .msgs :global(.typing) {
+    display: inline-flex;
+    gap: 5px;
+    padding: 14px 14px;
+  }
+
+  .msgs :global(.typing i) {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-line);
+    animation: dots 1s ease-in-out infinite;
+  }
+
+  .msgs :global(.typing i:nth-child(2)) {
+    animation-delay: 0.15s;
+  }
+
+  .msgs :global(.typing i:nth-child(3)) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes dots {
+    50% {
+      translate: 0 -5px;
+      background: var(--accent);
+    }
+  }
+
+  @keyframes in {
+    from {
+      opacity: 0;
+      translate: 0 8px;
+    }
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 16px 10px;
+  }
+
+  .chip {
+    padding: 7px 11px;
+    border: 1px solid var(--accent-line);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--accent-deep);
+    font: 500 12.5px/1.2 var(--sans);
+    cursor: pointer;
+  }
+
+  .chip:hover {
+    background: var(--accent-soft);
+  }
+
+  .composer {
+    display: flex;
+    gap: 8px;
+    margin: 0 12px;
+    padding: 6px 6px 6px 14px;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--white);
+  }
+
+  .composer:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .composer input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    outline: none;
+  }
+
+  .send {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+
+  .send svg {
+    width: 17px;
+    fill: var(--white);
+  }
+
+  .note {
+    padding: 10px 18px 18px;
+    color: var(--muted);
+    font-size: 11.5px;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  /* Miftah, standing */
+  .stand {
+    position: relative;
+    height: 100%;
+    margin: 0;
+  }
+
+  .stand svg {
+    display: block;
+    height: 100%;
+    max-height: 720px;
+    width: auto;
+    margin-inline: auto;
+    overflow: visible;
+  }
+
+  .stand :is(path, ellipse, circle, rect) {
+    stroke: var(--il-stroke);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .skin {
+    fill: #ecc9a3;
+  }
+
+  .jacket {
+    fill: #2f3466;
+  }
+
+  .lapel {
+    fill: #3d4380;
+  }
+
+  .shirtw {
+    fill: var(--white);
+  }
+
+  .tie {
+    fill: var(--accent);
+  }
+
+  .trousers {
+    fill: #262a52;
+  }
+
+  .shoe {
+    fill: #1d2140;
+  }
+
+  .button {
+    fill: #1d2140;
+  }
+
+  .hair {
+    fill: #4f5468;
+  }
+
+  .grey {
+    fill: #b9bfcd;
+    stroke: none !important;
+  }
+
+  .part {
+    stroke: #8a90a3 !important;
+    stroke-width: 2 !important;
+  }
+
+  .beard {
+    fill: #8a8f9f;
+    opacity: 0.45;
+    stroke: none !important;
+  }
+
+  .moustache {
+    fill: #4f5468;
+    stroke-width: 1.5 !important;
+  }
+
+  .line {
+    fill: none;
+  }
+
+  .brow {
+    stroke-width: 5 !important;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: translate 0.4s var(--ease);
+  }
+
+  .eye {
+    fill: var(--white);
+  }
+
+  .ink {
+    fill: var(--il-stroke);
+    stroke: none !important;
+  }
+
+  .lens {
+    fill: var(--white);
+    fill-opacity: 0.18;
+    stroke-width: 3 !important;
+  }
+
+  .cheek {
+    fill: var(--il-amber-2);
+    opacity: 0.7;
+    stroke: none !important;
+  }
+
+  .floor {
+    fill: var(--accent-soft);
+    stroke: none !important;
+  }
+
+  .face .lens {
+    stroke-width: 6;
+  }
+
+  .face :is(path, rect) {
+    stroke: var(--il-stroke);
+    stroke-width: 6;
+  }
+
+  .face .beard {
+    stroke: none;
+  }
+
+  .mouth-open {
+    fill: var(--il-stroke);
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .head,
+  .pupils {
+    transform-box: view-box;
+    transform-origin: 300px 430px;
+    transition:
+      rotate 0.5s var(--ease),
+      translate 0.5s var(--ease);
+  }
+
+  .arm-think {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .arm-left {
+    opacity: 0;
+  }
+
+  /* listening: he leans in */
+  .stand[data-state='listening'] .head {
+    rotate: -4deg;
+  }
+
+  /* thinking: hand on chin, eyes up, a little bubble of dots */
+  .stand[data-state='thinking'] .arm-think,
+  .stand[data-state='thinking'] .arm-left {
+    opacity: 1;
+  }
+
+  .stand[data-state='thinking'] .arm-rest {
+    opacity: 0;
+  }
+
+  .stand[data-state='thinking'] .pupils {
+    translate: -4px -4px;
+  }
+
+  .stand[data-state='thinking'] .brow-l {
+    translate: 0 -6px;
+  }
+
+  .stand[data-state='thinking'] .head {
+    rotate: 4deg;
+  }
+
+  .thinking-bubble {
+    position: absolute;
+    top: 2%;
+    left: 64%;
+    display: flex;
+    gap: 6px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 999px;
+    background: var(--white);
+    opacity: 0;
+    scale: 0.7;
+    transition:
+      opacity 0.3s ease,
+      scale 0.4s var(--ease);
+  }
+
+  .thinking-bubble i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: dots 1s ease-in-out infinite;
+  }
+
+  .thinking-bubble i:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .thinking-bubble i:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .stand[data-state='thinking'] .thinking-bubble {
+    opacity: 1;
+    scale: 1;
+  }
+
+  /* talking: the answer comes in */
+  .stand[data-state='talking'] .mouth-open {
+    opacity: 1;
+    animation: talk 0.45s ease-in-out infinite alternate;
+  }
+
+  .stand[data-state='talking'] .mouth {
+    opacity: 0;
+  }
+
+  @keyframes talk {
+    from {
+      scale: 1 0.25;
+    }
+    to {
+      scale: 0.85 1;
+    }
+  }
+
+  .status {
+    min-height: 1.4em;
+    margin-top: 8px;
+    color: var(--accent-deep);
+    font: italic 400 16px/1.4 var(--serif);
+    text-align: center;
+  }
+
+  @media (max-width: 760px) {
+    .overlay {
+      padding: 12px;
+      place-items: stretch;
+    }
+
+    .room {
+      grid-template-columns: 1fr;
+      grid-template-rows: 150px minmax(0, 1fr);
+      gap: 10px;
+      height: 100%;
+    }
+
+    .stand {
+      order: -1;
+    }
+
+    .stand svg {
+      height: 150px;
+    }
+
+    .status {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -4px;
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .thinking-bubble {
+      top: 0;
+      left: 60%;
+    }
+
+    .phone {
+      border-radius: 26px;
+      box-shadow: 0 0 0 1px var(--il-stroke);
+    }
+
+    .close {
+      top: 10px;
+      right: 10px;
+      width: 38px;
+      height: 38px;
+    }
+
+    .fab {
+      right: 12px;
+      bottom: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live,
+    .msgs :global(.typing i),
+    .thinking-bubble i,
+    .stand[data-state='talking'] .mouth-open {
+      animation: none;
+    }
+  }
+</style>

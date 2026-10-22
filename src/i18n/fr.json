@@ -1,0 +1,325 @@
+{
+  "meta": {
+    "title": "Hostay · La plateforme tout-en-un de la location courte durée au Maroc",
+    "description": "Réservations, voyageurs, accès, ménages, équipements Tuya et propriétaires sur une seule plateforme. Pour les conciergeries, les gestionnaires et les propriétaires. Bientôt disponible au Maroc."
+  },
+  "a11y": {
+    "skip": "Aller au contenu",
+    "home": "Hostay, accueil",
+    "nav": "Navigation principale",
+    "lang": "Langue",
+    "menuOpen": "Ouvrir le menu",
+    "menuClose": "Fermer le menu"
+  },
+  "nav": {
+    "modules": "Fonctionnalités",
+    "how": "Comment ça marche",
+    "who": "Pour qui",
+    "faq": "FAQ",
+    "signIn": "Se connecter",
+    "notify": "Rester informé"
+  },
+  "hero": {
+    "lineA": "Vos logements, réunis",
+    "lineB": "sur une seule",
+    "accent": "plateforme",
+    "lead": "Hostay réunit réservations, voyageurs, accès, ménages et propriétaires. Pour les conciergeries, les gestionnaires et les propriétaires.",
+    "primary": "Découvrir Hostay",
+    "secondary": "Être prévenu",
+    "hello": "Bonjour, je suis Miftah ! Laissez-moi vous raconter comment je gère mes locations."
+  },
+  "untangle": {
+    "chapters": [
+      {
+        "eyebrow": "Le constat",
+        "title": "Des calendriers, des messages, des clés, des ménages…",
+        "lead": "…et une équipe qui recolle les morceaux chaque jour. Tout finit par s'emmêler."
+      },
+      {
+        "eyebrow": "La recherche",
+        "title": "Un tableur, un groupe WhatsApp, un carnet…",
+        "lead": "On cherche la bonne méthode pour s'organiser. Chaque outil règle un morceau, aucun ne relie le tout."
+      },
+      {
+        "eyebrow": "La solution",
+        "title": "Puis vient Hostay.",
+        "lead": "Réservations, voyageurs, accès, équipes et propriétaires : tout se range au même endroit. L'esprit se libère."
+      }
+    ],
+    "labels": [
+      "Calendriers iCal",
+      "Infos voyageurs",
+      "Codes d'accès",
+      "Ménages",
+      "Propriétaires"
+    ],
+    "query": "comment gérer mes locations courte durée",
+    "methods": [
+      "Un tableur",
+      "Un groupe WhatsApp",
+      "Un carnet papier",
+      "Une appli par tâche"
+    ],
+    "found": "Hostay",
+    "end": "Une seule plateforme",
+    "tab": "Recherche",
+    "app": "Planning",
+    "appNote": "Tout est au même endroit."
+  },
+  "modules": {
+    "eyebrow": "Fonctionnalités",
+    "title": "Sept modules, une seule plateforme.",
+    "lead": "Chaque module passe la main au suivant. Hostay s'adapte, de quelques logements à un portefeuille complet.",
+    "items": [
+      {
+        "title": "Réservations",
+        "body": "Centralisées, par synchronisation iCal ou en saisie manuelle, dans un seul planning."
+      },
+      {
+        "title": "Informations voyageurs",
+        "body": "Collectées et validées automatiquement, sans relance de votre part."
+      },
+      {
+        "title": "Espace voyageur",
+        "body": "Un espace dédié avec le guide du logement et l'accès au logement."
+      },
+      {
+        "title": "Opérations",
+        "body": "Check-ins, check-outs, ménages et interventions au même endroit."
+      },
+      {
+        "title": "Tableaux de bord",
+        "body": "Des indicateurs clairs pour piloter l'activité."
+      },
+      {
+        "title": "Intégration Tuya",
+        "body": "Serrures, climatisation et capteurs connectés, gérés depuis Hostay."
+      },
+      {
+        "title": "Propriétaires",
+        "body": "De la visibilité pour eux, le contrôle pour vous."
+      }
+    ],
+    "say": {
+      "intro": "Voici ce qui m'aide, chaque jour.",
+      "lines": [
+        "Mes calendriers iCal se synchronisent, et j'ajoute le reste à la main : un seul planning.",
+        "Les infos de mes voyageurs arrivent déjà validées. Je ne relance plus personne.",
+        "Chaque voyageur a son espace, avec le guide et l'accès au logement.",
+        "Check-ins, check-outs, ménages, interventions : tout est au même endroit.",
+        "Des indicateurs clairs, et je sais où en est mon activité.",
+        "Serrures, clim et capteurs connectés : je les gère depuis Hostay.",
+        "Mes propriétaires ont de la visibilité. Moi, je garde le contrôle."
+      ],
+      "stay": "Je reste avec vous. Une question ? Cliquez sur « Miftah vous écoute », en bas de l'écran."
+    }
+  },
+  "how": {
+    "eyebrow": "Comment ça marche",
+    "title": "Trois temps, de la réservation au propriétaire.",
+    "lead": "Trois étapes, et tout est en place. Hostay s'adapte, de quelques logements à un portefeuille complet.",
+    "card": "Bien démarrer avec Hostay",
+    "done": "étapes",
+    "steps": [
+      {
+        "title": "Centraliser",
+        "body": "Les calendriers iCal se synchronisent, les réservations directes s'ajoutent à la main. Les informations voyageurs sont collectées et validées automatiquement.",
+        "items": [
+          "Calendriers iCal synchronisés",
+          "Réservations directes ajoutées",
+          "Infos voyageurs validées"
+        ]
+      },
+      {
+        "title": "Accueillir",
+        "body": "Chaque voyageur dispose d'un espace dédié avec le guide du logement et l'accès au logement.",
+        "items": [
+          "Espace voyageur dédié",
+          "Guide du logement",
+          "Accès au logement"
+        ]
+      },
+      {
+        "title": "Piloter",
+        "body": "Check-ins, check-outs, ménages et interventions au même endroit. Les propriétaires ont de la visibilité, vous gardez le contrôle.",
+        "items": [
+          "Check-ins et check-outs",
+          "Ménages et interventions",
+          "Visibilité propriétaires"
+        ]
+      }
+    ]
+  },
+  "product": {
+    "eyebrow": "Aperçu",
+    "title": "Le planning, en un coup d'œil.",
+    "lead": "Toutes les réservations, d'où qu'elles viennent, dans un seul planning.",
+    "example": "Données d'exemple",
+    "week": [
+      "Lun",
+      "Mar",
+      "Mer",
+      "Jeu",
+      "Ven",
+      "Sam",
+      "Dim"
+    ],
+    "ical": "iCal",
+    "manual": "Manuel",
+    "today": "Aujourd'hui"
+  },
+  "who": {
+    "eyebrow": "Pour qui",
+    "title": "Trois métiers, une plateforme.",
+    "items": [
+      {
+        "title": "Conciergeries",
+        "body": "Toute l'équipe sur la même page, du planning au terrain. Les propriétaires ont de la visibilité, vous gardez la main."
+      },
+      {
+        "title": "Gestionnaires",
+        "body": "De quelques logements à un portefeuille complet : un planning, des voyageurs accueillis, des équipements connectés."
+      },
+      {
+        "title": "Propriétaires",
+        "body": "Suivre son logement et son activité, sans gérer le quotidien."
+      }
+    ]
+  },
+  "morocco": {
+    "eyebrow": "Fait au Maroc",
+    "title": "Au Maroc. Par des Marocains, pour des Marocains.",
+    "lead": "Pensé pour la réalité de la location courte durée au Maroc, de Tanger à Agadir.",
+    "atlantic": "Océan Atlantique",
+    "med": "Mer Méditerranée",
+    "route": "De Tanger à Agadir"
+  },
+  "faq": {
+    "eyebrow": "Questions",
+    "title": "Questions fréquentes",
+    "items": [
+      {
+        "q": "Qu'est-ce que Hostay ?",
+        "a": "Une plateforme tout-en-un pour les conciergeries, les gestionnaires et les propriétaires de locations courte durée : réservations, informations voyageurs, espace voyageur, opérations, tableaux de bord, équipements connectés Tuya et visibilité propriétaires."
+      },
+      {
+        "q": "Quand Hostay sera-t-il disponible ?",
+        "a": "Bientôt, d'abord au Maroc."
+      },
+      {
+        "q": "Comment arrivent les réservations ?",
+        "a": "Par synchronisation des calendriers iCal de vos annonces, ou en saisie manuelle pour les réservations directes."
+      },
+      {
+        "q": "Quels équipements connectés sont pris en charge ?",
+        "a": "Hostay s'intègre à l'écosystème Tuya : serrures, climatisation et capteurs."
+      },
+      {
+        "q": "Que voient les propriétaires ?",
+        "a": "Ils ont de la visibilité sur leurs logements. La gestion reste entre vos mains."
+      },
+      {
+        "q": "Hostay convient-il à un petit nombre de logements ?",
+        "a": "Oui. Hostay s'adapte, de quelques logements à un portefeuille complet."
+      }
+    ]
+  },
+  "notify": {
+    "eyebrow": "Bientôt disponible",
+    "title": "Restez informé du lancement.",
+    "lead": "Laissez votre e-mail : nous vous écrirons à l'ouverture. Rien d'autre.",
+    "email": "Adresse e-mail",
+    "submit": "Me prévenir",
+    "sending": "Envoi…",
+    "errEmail": "Saisissez un e-mail valide, par exemple nom@domaine.ma.",
+    "errNetwork": "L'envoi a échoué. Vérifiez votre connexion et réessayez.",
+    "errRate": "Trop d'essais rapprochés. Réessayez dans quelques minutes.",
+    "notConnected": "L'inscription n'est pas encore ouverte. Revenez très bientôt.",
+    "success": "C'est noté. Nous vous écrirons à {email}."
+  },
+  "footer": {
+    "tagline": "La plateforme tout-en-un de la location courte durée.",
+    "origin": "Au Maroc. Par des Marocains, pour des Marocains.",
+    "rights": "Tous droits réservés."
+  },
+  "miftah": {
+    "listening": "Miftah vous écoute",
+    "title": "Miftah",
+    "subtitle": "L'assistant Hostay",
+    "demo": "Démo",
+    "demoNote": "Démo : les réponses sont préparées à l'avance. Ce n'est pas encore un vrai assistant.",
+    "placeholder": "Posez votre question…",
+    "send": "Envoyer",
+    "close": "Fermer",
+    "open": "Discuter avec Miftah",
+    "thinking": "Miftah réfléchit…",
+    "greeting": "Bonjour, je suis Miftah ! Posez-moi une question sur Hostay : réservations, voyageurs, accès, ménages, propriétaires…",
+    "suggestions": [
+      "Comment arrivent les réservations ?",
+      "Et les serrures connectées ?",
+      "Quand Hostay sera-t-il disponible ?"
+    ],
+    "answers": {
+      "hello": "Bonjour ! Je suis Miftah. Posez-moi une question sur Hostay : réservations, voyageurs, accès, ménages, propriétaires…",
+      "reservations": "Vos réservations sont centralisées dans un seul planning : les calendriers iCal se synchronisent, et vous ajoutez les réservations directes à la main.",
+      "guests": "Les informations voyageurs sont collectées et validées automatiquement, sans relance de votre part. Chaque voyageur a aussi un espace dédié, avec le guide et l'accès au logement.",
+      "access": "Hostay s'intègre à Tuya : serrures, climatisation et capteurs connectés se gèrent depuis la plateforme.",
+      "operations": "Check-ins, check-outs, ménages et interventions sont au même endroit, pour toute votre équipe.",
+      "owners": "Vos propriétaires ont de la visibilité sur ce qui compte, et vous gardez le contrôle.",
+      "price": "Les tarifs ne sont pas encore publiés. Laissez votre e-mail dans « Restez informé » : nous vous écrirons à l'ouverture.",
+      "launch": "Hostay arrive bientôt au Maroc. Laissez votre e-mail dans « Restez informé » pour être prévenu.",
+      "morocco": "Hostay est pensé au Maroc, pour la réalité de la location courte durée, de Tanger à Agadir.",
+      "size": "Hostay s'adapte, de quelques logements à un portefeuille complet.",
+      "fallback": "Bonne question ! Dans cette démo, je réponds sur les réservations, les voyageurs, les accès, les ménages, les propriétaires et le lancement. Essayez l'une des suggestions."
+    }
+  },
+  "day": {
+    "eyebrow": "Une journée avec Hostay",
+    "title": "Une journée de rotation, sans courir partout.",
+    "lead": "Exemple : un riad à Marrakech, un voyageur qui part, un autre qui arrive.",
+    "example": "Journée d'exemple",
+    "events": [
+      {
+        "time": "08:00",
+        "title": "Check-out",
+        "body": "Le voyageur part. Le ménage est déjà planifié."
+      },
+      {
+        "time": "10:30",
+        "title": "Ménage",
+        "body": "L'équipe voit la tâche et le logement à préparer."
+      },
+      {
+        "time": "14:00",
+        "title": "Accueil",
+        "body": "Le prochain voyageur reçoit son espace : le guide et l'accès au logement."
+      },
+      {
+        "time": "16:00",
+        "title": "Check-in",
+        "body": "Ses informations sont déjà collectées et validées."
+      },
+      {
+        "time": "20:00",
+        "title": "Propriétaire",
+        "body": "Le propriétaire a de la visibilité sur la journée. Vous gardez le contrôle."
+      }
+    ]
+  },
+  "text": {
+    "label": "Version texte",
+    "title": "Hostay · Version texte",
+    "intro": "Cette page présente tout le contenu du site en texte simple, sans animation : pour la lecture, les moteurs de recherche et les agents IA.",
+    "back": "Voir la page animée",
+    "story": "L'histoire",
+    "features": "Fonctionnalités",
+    "how": "Comment ça marche",
+    "day": "Une journée avec Hostay",
+    "who": "Pour qui",
+    "morocco": "Fait au Maroc",
+    "faq": "Questions fréquentes",
+    "contact": "Lancement et contact",
+    "contactBody": "Hostay est bientôt disponible au Maroc. Pour être prévenu à l'ouverture, laissez votre e-mail sur la page d'accueil. Les clients existants se connectent sur",
+    "cities": "Villes"
+  }
+}

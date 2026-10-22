@@ -1,0 +1,240 @@
+---
+/** Line-art schedule preview (sample data). Bars grow in when the window scrolls into view. */
+import { dict, type Locale } from '../i18n';
+import { SAMPLE_BOOKINGS, SAMPLE_PROPERTIES, SAMPLE_TODAY } from '../data/site';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale).product;
+---
+
+<section class="sec product" aria-labelledby="product-title">
+  <div class="wrap grid">
+    <div class="copy" data-reveal>
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h2 class="h2" id="product-title">{t.title}</h2>
+      <p class="lede">{t.lead}</p>
+      <ul class="legend">
+        <li><i class="sw ical"></i>{t.ical}</li>
+        <li><i class="sw manual"></i>{t.manual}</li>
+      </ul>
+    </div>
+
+    <figure class="window" data-reveal data-tilt>
+      <div class="chrome" aria-hidden="true"><i></i><i></i><i></i><span class="tag">{t.example}</span></div>
+      <div class="cal" role="table" aria-label={t.title}>
+        <div class="row head" role="row">
+          <span role="columnheader"></span>
+          {t.week.map((d, i) => <span role="columnheader" class:list={{ today: i === SAMPLE_TODAY }}>{d}</span>)}
+        </div>
+        {
+          SAMPLE_PROPERTIES.map((p, r) => (
+            <div class="row" role="row">
+              <span class="prop" role="rowheader">{p}</span>
+              <div class="lane" role="cell">
+                {SAMPLE_BOOKINGS.filter((b) => b.row === r).map((b, k) => (
+                  <span
+                    class:list={['bar', b.source]}
+                    style={`grid-column:${b.start + 1} / span ${Math.min(b.nights, 7 - b.start)};--d:${(r * 2 + k) * 90}ms`}
+                  >
+                    {b.guest}
+                  </span>
+                ))}
+                <span class="now" style={`grid-column:${SAMPLE_TODAY + 1}`} aria-hidden="true" />
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 48px;
+    align-items: center;
+  }
+
+  .legend {
+    display: flex;
+    gap: 18px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sw {
+    width: 14px;
+    height: 10px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 3px;
+  }
+
+  .sw.ical,
+  .bar.ical {
+    background: var(--il-indigo-2);
+  }
+
+  .sw.manual,
+  .bar.manual {
+    background: var(--il-amber-2);
+  }
+
+  .window {
+    margin: 0;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 14px;
+    background: var(--white);
+    box-shadow:
+      10px 10px 0 -1px var(--il-slate-3),
+      10px 10px 0 0 var(--il-stroke);
+    overflow: hidden;
+  }
+
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-bottom: 1.5px solid var(--il-stroke);
+    background: var(--il-slate-3);
+  }
+
+  .chrome i {
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 50%;
+    background: var(--white);
+  }
+
+  .tag {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cal {
+    padding: 10px 16px 16px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    align-items: center;
+    min-height: 48px;
+    border-bottom: 1px dashed var(--rule);
+  }
+
+  .row:last-child {
+    border-bottom: 0;
+  }
+
+  .row.head {
+    grid-template-columns: 120px repeat(7, minmax(0, 1fr));
+    min-height: 34px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .row.head .today {
+    color: var(--accent);
+  }
+
+  .prop {
+    overflow: hidden;
+    padding-right: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .lane {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 4px;
+    align-items: center;
+  }
+
+  .bar {
+    grid-row: 1;
+    overflow: hidden;
+    padding: 7px 8px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 7px;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.8s var(--ease);
+    transition-delay: calc(0.3s + var(--d));
+  }
+
+  .window:global(.in) .bar {
+    transform: none;
+  }
+
+  .now {
+    grid-row: 1;
+    justify-self: center;
+    width: 2px;
+    height: 40px;
+    background: var(--accent);
+    opacity: 0.35;
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .row,
+    .row.head {
+      grid-template-columns: 76px minmax(0, 1fr);
+    }
+
+    .row.head {
+      grid-template-columns: 76px repeat(7, minmax(0, 1fr));
+      font-size: 10px;
+    }
+
+    .prop {
+      font-size: 11px;
+    }
+
+    .bar {
+      padding: 6px 4px;
+      font-size: 10px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bar {
+      transform: none;
+    }
+  }
+</style>

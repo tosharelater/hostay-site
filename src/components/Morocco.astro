@@ -1,0 +1,313 @@
+---
+/**
+ * Made in Morocco: the section stays pinned while the map comes in. The coastline draws itself,
+ * the land fades in, then a route travels from Tangier to Agadir and each city lights up as the
+ * traveller reaches it (scripts/motion.ts). Coast and sea only: no borders are drawn.
+ */
+import { dict, type Locale } from '../i18n';
+import { CITIES } from '../data/site';
+import { MW, MH, COAST_D, LAND_D, ROUTE_D, CITY_POS, CITY_T, CITY_XY, routeAt, proj } from '../lib/map';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale).morocco;
+const cities = CITIES[locale].map((name, i) => {
+  const [x, y] = CITY_XY[i] ?? [0, 0];
+  return { name, x, y, t: CITY_T[i] ?? 0, side: CITY_POS[i]?.side ?? 'r' };
+});
+const start = routeAt(0);
+const [atlX, atlY] = proj(-11.1, 33.4);
+const [medX, medY] = proj(-3.2, 36.05);
+---
+
+<section class="morocco" aria-labelledby="ma-title" data-morocco>
+  <div class="pin">
+    <div class="wrap grid">
+      <div class="copy" data-reveal>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h2 class="h2" id="ma-title">{t.title}</h2>
+        <p class="lede">{t.lead}</p>
+        <p class="route-name"><i aria-hidden="true"></i>{t.route}</p>
+        <ol class="sr-only">{cities.map((c) => <li>{c.name}</li>)}</ol>
+      </div>
+
+      <figure class="map" aria-hidden="true">
+        <svg viewBox={`0 0 ${MW} ${MH}`} focusable="false">
+          <defs>
+            <linearGradient id="land-fade" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0.35" stop-color="#fff" />
+              <stop offset="1" stop-color="#fff" stop-opacity="0" />
+            </linearGradient>
+            <mask id="land-mask"><rect width={MW} height={MH} fill="url(#land-fade)" /></mask>
+            <radialGradient id="sea-fade" cx="0.35" cy="0.45" r="0.65">
+              <stop offset="0.5" stop-color="#fff" />
+              <stop offset="1" stop-color="#fff" stop-opacity="0" />
+            </radialGradient>
+            <mask id="sea-mask"><rect width={MW} height={MH} fill="url(#sea-fade)" /></mask>
+            <pattern id="sea-lines" width="14" height="14" patternUnits="userSpaceOnUse">
+              <path d="M0 7 Q3.5 4 7 7 T14 7" />
+            </pattern>
+          </defs>
+          <rect class="sea" width={MW} height={MH} fill="url(#sea-lines)" mask="url(#sea-mask)" />
+          <path class="land" d={LAND_D} mask="url(#land-mask)" data-land />
+          <path class="coast" d={COAST_D} pathLength="1" data-coast />
+          <text class="water" x={atlX} y={atlY} transform={`rotate(-58 ${atlX} ${atlY})`}>{t.atlantic}</text>
+          <text class="water" x={medX} y={medY}>{t.med}</text>
+          <path class="route-ghost" d={ROUTE_D} />
+          <path class="route" d={ROUTE_D} pathLength="1" data-map-route />
+        </svg>
+        {
+          cities.map((c) => (
+            <span class:list={['city', c.side]} data-city data-t={c.t} style={`left:${(c.x / MW) * 100}%;top:${(c.y / MH) * 100}%`}>
+              <i />
+              <b>{c.name}</b>
+            </span>
+          ))
+        }
+        <span class="traveller" data-map-traveller style={`left:${(start[0] / MW) * 100}%;top:${(start[1] / MH) * 100}%`}></span>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .morocco {
+    height: 190vh;
+  }
+
+  .pin {
+    position: sticky;
+    top: 0;
+    display: grid;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 84px var(--gutter) 24px;
+    overflow: hidden;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 48px;
+    align-items: center;
+  }
+
+  .h2 {
+    font-size: clamp(34px, 4.4vw, 56px);
+  }
+
+  .route-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 26px;
+    color: var(--accent-deep);
+    font: italic 400 20px/1.2 var(--serif);
+  }
+
+  .route-name i {
+    width: 34px;
+    border-top: 2.5px dashed var(--accent);
+  }
+
+  /* the map */
+  .map {
+    position: relative;
+    width: min(100%, calc((100svh - 140px) * 540 / 500));
+    margin: 0 auto;
+    aspect-ratio: 540 / 500;
+  }
+
+  .map svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  #sea-lines path {
+    fill: none;
+    stroke: var(--accent-line);
+    stroke-width: 0.8;
+    opacity: 0.55;
+  }
+
+  .land {
+    fill: var(--il-cream);
+    opacity: var(--land, 0);
+  }
+
+  .coast {
+    fill: none;
+    stroke: var(--il-stroke);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: var(--coast-off, 1);
+  }
+
+  .water {
+    fill: var(--accent);
+    font: italic 400 15px/1 var(--serif);
+    letter-spacing: 0.04em;
+    opacity: var(--land, 0);
+  }
+
+  .route-ghost,
+  .route {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .route-ghost {
+    stroke: var(--line);
+    stroke-width: 1.5;
+    stroke-dasharray: 2 6;
+    opacity: var(--land, 0);
+  }
+
+  .route {
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-dasharray: 1;
+    stroke-dashoffset: var(--route-off, 1);
+  }
+
+  .city {
+    position: absolute;
+    translate: -50% -50%;
+    opacity: var(--land, 0);
+  }
+
+  .city i {
+    display: block;
+    width: 13px;
+    height: 13px;
+    border: 2px solid var(--line);
+    border-radius: 50%;
+    background: var(--page);
+    transition:
+      border-color 0.35s ease,
+      background-color 0.35s ease,
+      scale 0.4s var(--ease);
+  }
+
+  .city b {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    padding: 4px 9px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--muted);
+    font: 400 14px/1 var(--serif);
+    white-space: nowrap;
+    translate: 0 -50%;
+    transition:
+      color 0.35s ease,
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+
+  .city.l b {
+    left: auto;
+    right: 20px;
+  }
+
+  .city.u b {
+    top: auto;
+    bottom: 14px;
+    left: 50%;
+    translate: -100% 0;
+  }
+
+  .city:global(.on) i {
+    border-color: var(--accent);
+    background: var(--accent);
+    scale: 1.2;
+  }
+
+  .city:global(.on) b {
+    border-color: var(--accent-line);
+    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--accent-soft);
+  }
+
+  .traveller {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--il-stroke);
+    border-radius: 50%;
+    background: var(--il-amber);
+    box-shadow: 0 0 0 6px rgba(240, 180, 110, 0.25);
+    translate: -50% -50%;
+    opacity: var(--trav, 0);
+  }
+
+  @media (max-width: 860px) {
+    .morocco {
+      height: 170vh;
+    }
+
+    .pin {
+      padding-top: 76px;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .h2 {
+      font-size: 28px;
+    }
+
+    .copy .lede {
+      font-size: 15px;
+    }
+
+    .route-name {
+      margin-top: 12px;
+      font-size: 17px;
+    }
+
+    .map {
+      width: min(100%, calc((100svh - 380px) * 540 / 500));
+    }
+
+    .city b {
+      left: 15px;
+      padding: 2px 6px;
+      font-size: 11px;
+    }
+
+    .city.l b {
+      right: 15px;
+    }
+
+    .city i {
+      width: 10px;
+      height: 10px;
+    }
+
+    .water {
+      font-size: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .morocco {
+      height: auto;
+    }
+
+    .pin {
+      position: static;
+    }
+  }
+</style>

@@ -1,0 +1,709 @@
+---
+/**
+ * The story, in one sticky scene with three chapters, built around the guide character
+ * (Guide.astro), who stays fixed at the bottom centre while this section scrolls into place:
+ * 1. the problem: he is worried; a tangled thought hangs above him, chores floating around it;
+ * 2. the search: he turns his back to us and searches on the screen above him; each method
+ *    found is crossed out, then Hostay comes up and he opens it;
+ * 3. the answer: he turns back to us and says "Hostay !".
+ * scripts/motion.ts scrubs it with scroll progress.
+ */
+import Logo from './Logo.astro';
+import { dict, type Locale } from '../i18n';
+import { CHORES, tangle } from '../lib/untangle';
+import { SAMPLE_PROPERTIES, SAMPLE_BOOKINGS } from '../data/site';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale).untangle;
+const chores = t.labels.map((label, i) => ({ label, ...(CHORES[i] ?? { x: 50, y: -10, r: 0 }) }));
+// The thought cloud above his head, with its tangled thread.
+const cloud = 'M92 214 C48 214 30 168 62 142 C46 98 98 66 138 88 C158 38 236 30 262 78 C300 52 360 76 352 128 C392 140 392 206 340 214 Z';
+const knot = tangle(206, 140, 1.25);
+---
+
+<section class="untangle" aria-labelledby="story-0" data-untangle>
+  <div class="stick">
+    <div class="copy">
+      <div class="chapters">
+        {
+          t.chapters.map((c, i) => (
+            <div class:list={['chapter', { active: i === 0 }]} data-chapter>
+              <p class="eyebrow">{c.eyebrow}</p>
+              <h2 class="h2" id={`story-${i}`}>{c.title}</h2>
+              <p class="lede">{c.lead}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- above his head: first the tangled thought, then the screen he searches on -->
+    <div class="zone">
+      <div class="thought" data-thought aria-hidden="true">
+        <svg viewBox="0 0 412 262" focusable="false">
+          <circle class="puff" cx="206" cy="236" r="9" />
+          <circle class="puff" cx="196" cy="254" r="5" />
+          <path class="cloud" d={cloud} />
+          <path class="knot" d={knot} pathLength="1" />
+        </svg>
+        <ul class="chores">
+          {
+            chores.map((c, i) => (
+              <li data-label style={`left:${c.x}%;top:${c.y}%;--r:${c.r}deg;--i:${i}`}>
+                <span>{c.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="screen" data-screen aria-hidden="true">
+        <div class="window">
+          <div class="bar">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="tab on" data-tab-search>{t.tab}</span>
+            <span class="tab app-tab" data-tab-app><Logo size={11} />Hostay</span>
+          </div>
+
+          <div class="view search-view" data-search-view>
+            <div class="prompt">
+              <svg class="spark" viewBox="0 0 16 16"><path d="M8 1 L9.6 6.4 L15 8 L9.6 9.6 L8 15 L6.4 9.6 L1 8 L6.4 6.4 Z" /></svg>
+              <span data-query data-full={t.query}></span><b class="caret"></b>
+              <span class="send">↵</span>
+            </div>
+            <ul class="results">
+              {
+                t.methods.map((m) => (
+                  <li class="result" data-result>
+                    <span class="title"><span class="strike">{m}</span><i class="nope" /></span>
+                    <span class="lines"><i></i><i></i></span>
+                  </li>
+                ))
+              }
+            </ul>
+            <div class="found" data-found>
+              <span class="title"><Logo size={14} />{t.found}<i class="yes" /></span>
+              <span class="url">hostayapp.com</span>
+            </div>
+          </div>
+
+          <div class="view app-view" data-app-view>
+            <aside class="side"><Logo size={16} /><i></i><i class="on"></i><i></i><i></i></aside>
+            <div class="plan">
+              <p class="plan-title">{t.app}<span>{t.appNote}</span></p>
+              {
+                SAMPLE_PROPERTIES.map((name, row) => (
+                  <div class="row">
+                    <span class="name">{name}</span>
+                    <span class="track">
+                      {SAMPLE_BOOKINGS.filter((b) => b.row === row).map((b) => (
+                        <i class:list={['stay', b.source]} data-stay style={`left:${(b.start / 7) * 100}%;width:${(b.nights / 7) * 100}%`} />
+                      ))}
+                    </span>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .untangle {
+    --screen-w: min(560px, 44vw);
+    position: relative;
+    height: 340vh;
+  }
+
+  .stick {
+    position: sticky;
+    top: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--screen-w) minmax(0, 1fr);
+    column-gap: 36px;
+    max-width: 1320px;
+    margin-inline: auto;
+    height: 100vh;
+    height: 100svh;
+    padding: 96px var(--gutter) calc(var(--guide-h) * 0.6);
+    overflow: hidden;
+  }
+
+  .copy {
+    align-self: center;
+    max-width: 400px;
+    justify-self: end;
+  }
+
+  /* chapters share one grid cell and cross-fade */
+  .chapters {
+    display: grid;
+  }
+
+  .chapter {
+    grid-area: 1 / 1;
+    transition:
+      opacity 0.5s ease,
+      translate 0.6s var(--ease);
+  }
+
+  .chapter:not(.active) {
+    opacity: 0;
+    translate: 0 14px;
+    pointer-events: none;
+  }
+
+  :global(html.no-js) .chapters {
+    display: block;
+  }
+
+  :global(html.no-js) .chapter {
+    opacity: 1;
+    translate: none;
+  }
+
+  .h2 {
+    font-size: clamp(28px, 2.8vw, 42px);
+  }
+
+  /* the screen: a light window on a soft periwinkle panel; sizes follow its width (cqw) */
+  .zone {
+    grid-column: 2;
+    display: grid;
+    align-items: end;
+    min-height: 0;
+  }
+
+  .zone > * {
+    grid-area: 1 / 1;
+  }
+
+  /* the tangled thought */
+  .thought {
+    position: relative;
+    justify-self: center;
+    width: 86%;
+    aspect-ratio: 412 / 262;
+    margin-bottom: calc(var(--guide-h) * 0.12);
+    transform-origin: 50% 100%;
+  }
+
+  .thought svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .cloud,
+  .puff {
+    fill: var(--white);
+    stroke: var(--il-stroke);
+    stroke-width: 2;
+  }
+
+  .cloud {
+    filter: drop-shadow(6px 6px 0 var(--il-slate-3));
+  }
+
+  .knot {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 0.92 0.08;
+    animation: knot 9s linear infinite;
+  }
+
+  @keyframes knot {
+    to {
+      stroke-dashoffset: -1;
+    }
+  }
+
+  .screen {
+    container-type: inline-size;
+    width: 100%;
+    max-height: 100%;
+    aspect-ratio: 16 / 10;
+    padding: 2.2cqw;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 3.2cqw;
+    background: linear-gradient(140deg, #eef0fd, var(--il-indigo-2) 60%, #b3b7f3);
+    box-shadow: 1.4cqw 1.4cqw 0 var(--il-slate-3);
+    opacity: 0;
+    transform-origin: 50% 100%;
+    transition: opacity 0.5s ease;
+  }
+
+  .window {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 2cqw;
+    background: var(--white);
+    color: var(--ink);
+    font-size: clamp(9px, 2.5cqw, 14px);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 1.6cqw;
+    padding: 1.5cqw 2cqw;
+    border-bottom: 1px solid var(--rule);
+    background: var(--panel);
+  }
+
+  .dots {
+    display: flex;
+    gap: 0.9cqw;
+    margin-right: 1cqw;
+  }
+
+  .dots i {
+    width: 1.4cqw;
+    height: 1.4cqw;
+    border: 1px solid var(--il-stroke);
+    border-radius: 50%;
+  }
+
+  .dots i:first-child {
+    background: var(--il-amber-2);
+  }
+
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8cqw;
+    padding: 0.7cqw 1.8cqw;
+    border-radius: 1.2cqw;
+    color: var(--muted);
+    font-size: 0.85em;
+    font-weight: 600;
+  }
+
+  .tab.on {
+    background: var(--white);
+    color: var(--accent-deep);
+    box-shadow: 0 0 0 1px var(--rule);
+  }
+
+  .app-tab {
+    opacity: 0;
+  }
+
+  .app-tab :global(svg) {
+    width: 1.9cqw;
+    height: auto;
+    color: var(--accent);
+  }
+
+  .view {
+    position: absolute;
+    inset: 6.2cqw 0 0;
+    padding: 2.4cqw 2.8cqw;
+  }
+
+  .prompt {
+    display: flex;
+    align-items: center;
+    gap: 1.4cqw;
+    height: 6.4cqw;
+    padding: 0 1cqw 0 2cqw;
+    border: 1.5px solid var(--accent-line);
+    border-radius: 1.8cqw;
+    background: var(--panel);
+    white-space: nowrap;
+    overflow: hidden;
+    box-shadow: 0 0 0 0.8cqw #eef0fd;
+  }
+
+  .spark {
+    flex: none;
+    width: 2.6cqw;
+    height: 2.6cqw;
+  }
+
+  .spark path {
+    fill: var(--accent);
+  }
+
+  .caret {
+    flex: none;
+    width: 1.5px;
+    height: 3cqw;
+    margin-left: -1cqw;
+    background: var(--accent);
+    animation: blink 1s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .send {
+    display: grid;
+    place-items: center;
+    width: 4.4cqw;
+    height: 4.4cqw;
+    margin-left: auto;
+    border-radius: 1.3cqw;
+    background: var(--accent);
+    color: var(--white);
+  }
+
+  .results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6cqw;
+    margin: 2.2cqw 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .result {
+    display: grid;
+    gap: 1cqw;
+    padding: 1.8cqw 2cqw;
+    border: 1px solid var(--rule);
+    border-radius: 1.8cqw;
+    background: var(--white);
+    opacity: 0;
+    translate: 0 1.4cqw;
+    --strike: 0;
+  }
+
+  .title {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2cqw;
+    white-space: nowrap;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .lines {
+    display: grid;
+    gap: 0.7cqw;
+  }
+
+  .lines i {
+    height: 0.9cqw;
+    border-radius: 1cqw;
+    background: var(--il-slate-3);
+  }
+
+  .lines i + i {
+    width: 60%;
+  }
+
+  .found {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.6cqw;
+    padding: 1.8cqw 2.2cqw;
+    border: 1.5px solid var(--accent);
+    border-radius: 1.8cqw;
+    background: var(--accent-soft);
+    opacity: 0;
+  }
+
+  .found .title {
+    color: var(--accent-deep);
+    font-size: 1.1em;
+  }
+
+  .found :global(svg) {
+    width: 2.6cqw;
+    height: auto;
+    color: var(--accent);
+  }
+
+  .url {
+    color: var(--muted);
+    font-size: 0.85em;
+  }
+
+  .strike {
+    position: relative;
+  }
+
+  .strike::after {
+    content: '';
+    position: absolute;
+    left: -0.6cqw;
+    right: -0.6cqw;
+    top: 54%;
+    height: 2px;
+    border-radius: 2px;
+    background: #b8463e;
+    scale: var(--strike) 1;
+    transform-origin: left;
+  }
+
+  .nope,
+  .yes {
+    position: relative;
+    flex: none;
+    width: 2.7cqw;
+    height: 2.7cqw;
+    border-radius: 50%;
+  }
+
+  .nope {
+    background: #f6dcd8;
+    opacity: clamp(0, calc(var(--strike) * 3 - 2), 1);
+  }
+
+  .nope::before,
+  .nope::after {
+    content: '';
+    position: absolute;
+    left: 25%;
+    top: calc(50% - 1px);
+    width: 50%;
+    height: 2px;
+    background: #b8463e;
+    rotate: 45deg;
+  }
+
+  .nope::after {
+    rotate: -45deg;
+  }
+
+  .yes {
+    background: var(--accent);
+  }
+
+  .yes::after {
+    content: '';
+    position: absolute;
+    left: 34%;
+    top: 18%;
+    width: 25%;
+    height: 50%;
+    border: solid var(--white);
+    border-width: 0 2px 2px 0;
+    rotate: 45deg;
+  }
+
+  /* Hostay, opened */
+  .app-view {
+    display: flex;
+    gap: 2.4cqw;
+    opacity: 0;
+  }
+
+  .side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.8cqw;
+    padding: 1.8cqw 1.4cqw;
+    border-radius: 1.8cqw;
+    background: var(--panel);
+    box-shadow: inset 0 0 0 1px var(--rule);
+  }
+
+  .side :global(svg) {
+    width: 3.2cqw;
+    height: auto;
+    margin-bottom: 1cqw;
+    color: var(--accent);
+  }
+
+  .side i {
+    width: 2.8cqw;
+    height: 0.9cqw;
+    border-radius: 1cqw;
+    background: var(--il-slate-3);
+  }
+
+  .side i.on {
+    background: var(--accent);
+  }
+
+  .plan {
+    flex: 1;
+    display: grid;
+    align-content: start;
+    gap: 1.8cqw;
+  }
+
+  .plan-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font: 400 1.25em/1.2 var(--serif);
+  }
+
+  .plan-title span {
+    color: var(--muted);
+    font: italic 400 0.7em/1.2 var(--serif);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 16cqw 1fr;
+    align-items: center;
+    gap: 1.8cqw;
+  }
+
+  .name {
+    overflow: hidden;
+    color: var(--ink-soft);
+    font-size: 0.85em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .track {
+    position: relative;
+    height: 4.2cqw;
+    border-radius: 1cqw;
+    background: var(--panel);
+    box-shadow: inset 0 0 0 1px var(--rule);
+  }
+
+  .stay {
+    position: absolute;
+    top: 0.7cqw;
+    bottom: 0.7cqw;
+    border: 1px solid var(--il-stroke);
+    border-radius: 0.9cqw;
+    transform-origin: left;
+    scale: var(--fill, 0) 1;
+  }
+
+  .stay.ical {
+    background: var(--il-indigo-2);
+  }
+
+  .stay.manual {
+    background: var(--il-amber-2);
+  }
+
+  /* chores float around the thought */
+  .chores {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    pointer-events: none;
+  }
+
+  .chores li {
+    position: absolute;
+    translate: -50% -50%;
+  }
+
+  .chores span {
+    display: block;
+    padding: 7px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 9px;
+    background: var(--white);
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 3px 3px 0 var(--il-slate-3);
+    rotate: var(--r);
+    animation: jitter 2.4s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -0.45s);
+  }
+
+  @keyframes jitter {
+    50% {
+      translate: 0 -7px;
+      rotate: calc(var(--r) * -1);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .untangle {
+      --screen-w: 100%;
+    }
+
+    .stick {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 80px var(--gutter) calc(var(--guide-h) * 0.62);
+    }
+
+    .copy {
+      align-self: auto;
+      justify-self: auto;
+      max-width: none;
+      text-align: center;
+    }
+
+
+    .h2 {
+      font-size: 28px;
+    }
+
+    .copy .lede {
+      margin-inline: auto;
+      font-size: 15px;
+    }
+
+    .zone {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .screen {
+      max-height: none;
+    }
+
+    .chores span {
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .untangle {
+      height: auto;
+    }
+
+    .stick {
+      position: relative;
+      height: auto;
+      min-height: 100svh;
+    }
+
+    .chapters {
+      display: block;
+    }
+
+    .chapter {
+      opacity: 1 !important;
+      translate: none !important;
+      margin-bottom: 28px;
+    }
+
+    .caret,
+    .knot,
+    .chores span {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,185 @@
+---
+/**
+ * Features, told by the guide character (Guide.astro): one card per row, alternating right and
+ * left of him, each sliding in from its side; his speech bubble says what each module does for
+ * him as it reaches the middle of the screen (scripts/motion.ts). A last, empty row is where he
+ * tells us he stays with us (Miftah, the assistant) before he leaves.
+ */
+import ModuleIcon from './ModuleIcon.astro';
+import { dict, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale).modules;
+---
+
+<section class="sec modules" id="modules" aria-labelledby="modules-title">
+  <div class="wrap layout">
+    <div class="head" data-reveal>
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h2 class="h2" id="modules-title">{t.title}</h2>
+      <p class="lede">{t.lead}</p>
+    </div>
+    <ol class="list">
+      {
+        t.items.map((m, i) => (
+          <li class:list={['card', i % 2 ? 'left' : 'right']} data-reveal data-feature={i + 1}>
+            <div class="art">
+              <ModuleIcon index={i} />
+            </div>
+            <div class="text">
+              <span class="num">0{i + 1}</span>
+              <h3>{m.title}</h3>
+              <p>{m.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="farewell" data-feature={t.items.length + 1} aria-hidden="true"></div>
+  </div>
+</section>
+
+<style>
+  .modules {
+    padding-bottom: calc(var(--guide-h) * 0.4);
+    overflow-x: clip;
+  }
+
+  /* cards alternate on either side of the gap where the guide stands */
+  .layout,
+  .list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) calc(var(--guide-w) + 64px) minmax(0, 1fr);
+    row-gap: 46px;
+    align-items: center;
+  }
+
+  .list {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .head {
+    grid-column: 1;
+  }
+
+  .h2 {
+    font-size: clamp(30px, 3.4vw, 46px);
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 20px 22px 20px 14px;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: var(--panel);
+    transition:
+      opacity 0.9s var(--ease),
+      transform 0.9s var(--ease),
+      border-color 0.35s ease,
+      box-shadow 0.4s ease,
+      background-color 0.35s ease;
+  }
+
+  .card.right {
+    grid-column: 3;
+  }
+
+  .card.left {
+    grid-column: 1;
+  }
+
+  /* slide in from their own side */
+  .card.right[data-reveal]:not(:global(.in)) {
+    transform: translateX(70px);
+  }
+
+  .card.left[data-reveal]:not(:global(.in)) {
+    transform: translateX(-70px);
+  }
+
+  .card:global(.current) {
+    border-color: var(--accent-line);
+    background: var(--white);
+    box-shadow: 6px 6px 0 var(--accent-soft);
+  }
+
+  .art {
+    height: 104px;
+    transition: transform 0.6s var(--ease);
+  }
+
+  .card:global(.current) .art {
+    transform: translateY(-4px) scale(1.06);
+  }
+
+  .num {
+    color: var(--accent);
+    font: italic 400 15px/1 var(--serif);
+  }
+
+  h3 {
+    margin-top: 4px;
+    font-size: 22px;
+    line-height: 1.15;
+  }
+
+  .text p {
+    margin-top: 6px;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+
+  .farewell {
+    grid-column: 1 / -1;
+    height: 46vh;
+  }
+
+  @media (max-width: 860px) {
+    .layout,
+    .list {
+      grid-template-columns: 1fr;
+      row-gap: 16px;
+    }
+
+    .head,
+    .card.right,
+    .card.left {
+      grid-column: 1;
+    }
+
+    .card {
+      grid-template-columns: 88px 1fr;
+      gap: 12px;
+    }
+
+    .card.right[data-reveal]:not(:global(.in)) {
+      transform: translateX(40px);
+    }
+
+    .card.left[data-reveal]:not(:global(.in)) {
+      transform: translateX(-40px);
+    }
+
+    .art {
+      height: 80px;
+    }
+
+    h3 {
+      font-size: 20px;
+    }
+
+    .farewell {
+      height: 40vh;
+    }
+  }
+</style>

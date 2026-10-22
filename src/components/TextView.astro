@@ -1,0 +1,221 @@
+---
+/**
+ * The text version of the home page: all of its content as plain, semantic HTML with no
+ * animation and no script. For reading, search engines and AI agents (see also /llms.txt).
+ */
+import '../styles/global.css';
+import { href, abs } from '../lib/paths';
+import Logo from './Logo.astro';
+import { dict, META, LOCALES, type Locale } from '../i18n';
+import { SITE, CITIES } from '../data/site';
+import { jsonLd } from '../lib/seo';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale);
+const x = t.text;
+const canonical = abs(META[locale].text);
+---
+
+<!doctype html>
+<html lang={META[locale].lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{x.title}</title>
+    <meta name="description" content={t.meta.description} />
+    <link rel="canonical" href={canonical} />
+    {LOCALES.map((l) => <link rel="alternate" hreflang={META[l].lang} href={abs(META[l].text)} />)}
+    <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
+    <meta property="og:title" content={x.title} />
+    <meta property="og:description" content={t.meta.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={abs('/og.png')} />
+    <script type="application/ld+json" set:html={jsonLd(locale)} />
+  </head>
+  <body>
+    <main class="text">
+      <header>
+        <a class="brand" href={href(META[locale].home)}><Logo size={22} /> Hostay</a>
+        <nav aria-label={t.a11y.lang}>
+          {LOCALES.map((l) => <a href={href(META[l].text)} hreflang={META[l].lang} aria-current={l === locale ? 'true' : undefined}>{META[l].label}</a>)}
+        </nav>
+      </header>
+
+      <h1>{t.hero.lineA} {t.hero.lineB} {t.hero.accent}</h1>
+      <p class="intro">{x.intro} <a href={href(META[locale].home)}>{x.back}</a></p>
+      <p>{t.hero.lead}</p>
+
+      <section>
+        <h2>{x.story}</h2>
+        {
+          t.untangle.chapters.map((c) => (
+            <>
+              <h3>{c.eyebrow} — {c.title}</h3>
+              <p>{c.lead}</p>
+            </>
+          ))
+        }
+      </section>
+
+      <section>
+        <h2>{x.features}</h2>
+        <p>{t.modules.title} {t.modules.lead}</p>
+        <ol>{t.modules.items.map((m) => <li><strong>{m.title}.</strong> {m.body}</li>)}</ol>
+      </section>
+
+      <section>
+        <h2>{x.how}</h2>
+        <p>{t.how.title} {t.how.lead}</p>
+        <ol>
+          {
+            t.how.steps.map((s) => (
+              <li>
+                <strong>{s.title}.</strong> {s.body}
+                <ul>{s.items.map((i) => <li>{i}</li>)}</ul>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <section>
+        <h2>{x.day}</h2>
+        <p>{t.day.title} {t.day.lead} ({t.day.example})</p>
+        <ul>{t.day.events.map((e) => <li><strong>{e.time}, {e.title}.</strong> {e.body}</li>)}</ul>
+      </section>
+
+      <section>
+        <h2>{x.who}</h2>
+        <ul>{t.who.items.map((w) => <li><strong>{w.title}.</strong> {w.body}</li>)}</ul>
+      </section>
+
+      <section>
+        <h2>{x.morocco}</h2>
+        <p>{t.morocco.title} {t.morocco.lead}</p>
+        <p>{x.cities} — {CITIES[locale].join(', ')}.</p>
+      </section>
+
+      <section>
+        <h2>{x.faq}</h2>
+        <dl>
+          {
+            t.faq.items.map((f) => (
+              <>
+                <dt>{f.q}</dt>
+                <dd>{f.a}</dd>
+              </>
+            ))
+          }
+        </dl>
+      </section>
+
+      <section>
+        <h2>{x.contact}</h2>
+        <p>{x.contactBody} <a href={SITE.appUrl}>{SITE.appUrl.replace(/^https?:\/\//, '')}</a>.</p>
+        <p>{t.footer.tagline} {t.footer.origin}</p>
+      </section>
+
+      <footer>© {new Date().getFullYear()} Hostay · hostayapp.com · <a href={href('/llms.txt')}>llms.txt</a></footer>
+    </main>
+  </body>
+</html>
+
+<style>
+  .text {
+    width: min(760px, 100%);
+    margin: 0 auto;
+    padding: 32px var(--gutter) 64px;
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  nav {
+    display: flex;
+    gap: 12px;
+    font-size: 14px;
+  }
+
+  nav a[aria-current='true'] {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  h1 {
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.1;
+  }
+
+  h2 {
+    margin-top: 44px;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule);
+    font-size: 28px;
+  }
+
+  h3 {
+    margin-top: 20px;
+    font-size: 20px;
+  }
+
+  p,
+  ol,
+  ul,
+  dl {
+    margin-top: 12px;
+  }
+
+  ol,
+  ul {
+    padding-left: 22px;
+  }
+
+  li + li {
+    margin-top: 6px;
+  }
+
+  .intro {
+    padding: 14px 16px;
+    border: 1px dashed var(--accent-line);
+    border-radius: 12px;
+    background: var(--panel);
+    font-size: 15px;
+  }
+
+  a {
+    color: var(--accent-deep);
+  }
+
+  dt {
+    margin-top: 16px;
+    font-weight: 700;
+  }
+
+  dd {
+    margin: 4px 0 0;
+  }
+
+  footer {
+    margin-top: 56px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+</style>

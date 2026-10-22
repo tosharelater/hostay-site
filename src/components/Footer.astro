@@ -1,0 +1,131 @@
+---
+import Logo from './Logo.astro';
+import { href } from '../lib/paths';
+import { dict, META, LOCALES, type Locale } from '../i18n';
+import { SITE } from '../data/site';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale);
+const year = new Date().getFullYear();
+const links = [
+  { href: '#modules', label: t.nav.modules },
+  { href: '#how', label: t.nav.how },
+  { href: '#who', label: t.nav.who },
+  { href: '#faq', label: t.nav.faq },
+  { href: '#notify', label: t.nav.notify }
+];
+---
+
+<footer class="foot">
+  <div class="wrap top">
+    <div class="id">
+      <a class="brand" href={href(META[locale].home)} aria-label={t.a11y.home}>
+        <Logo size={26} />
+        <span>Host<span class="soft">ay</span></span>
+      </a>
+      <p class="tagline">{t.footer.tagline}</p>
+      <p class="origin">{t.footer.origin}</p>
+    </div>
+    <nav aria-label={t.a11y.nav}>
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        <li><a href={SITE.appUrl} rel="noopener">{t.nav.signIn}</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="wrap base">
+    <span>© {year} Hostay · hostayapp.com · {t.footer.rights}</span>
+    <nav class="lang" aria-label={t.a11y.lang}>
+      {LOCALES.map((l) => <a href={href(META[l].home)} hreflang={META[l].lang} lang={META[l].lang} aria-current={l === locale ? 'true' : undefined}>{META[l].label}</a>)}
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    padding: 64px var(--gutter) 28px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent);
+    font: 700 22px/1 var(--sans);
+    letter-spacing: -0.02em;
+  }
+
+  .brand > span {
+    color: var(--ink);
+  }
+
+  .soft {
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+
+  .tagline {
+    margin-top: 14px;
+    color: var(--ink-soft);
+  }
+
+  .origin {
+    margin-top: 6px;
+    color: var(--accent);
+    font: italic 400 17px/1.4 var(--serif);
+  }
+
+  nav ul {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 10px 40px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    color: var(--ink);
+    font-size: 14px;
+  }
+
+  nav a:hover {
+    color: var(--accent);
+  }
+
+  .base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--rule);
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .lang {
+    display: flex;
+    gap: 12px;
+  }
+
+  .lang a[aria-current='true'] {
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+</style>

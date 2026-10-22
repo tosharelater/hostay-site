@@ -1,0 +1,325 @@
+{
+  "meta": {
+    "title": "Hostay · The all-in-one platform for short-stay rentals in Morocco",
+    "description": "Bookings, guests, access, cleaning, Tuya devices and owners on one platform. For concierge teams, property managers and owners. Coming soon to Morocco."
+  },
+  "a11y": {
+    "skip": "Skip to content",
+    "home": "Hostay, home",
+    "nav": "Main navigation",
+    "lang": "Language",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu"
+  },
+  "nav": {
+    "modules": "Features",
+    "how": "How it works",
+    "who": "Who it's for",
+    "faq": "FAQ",
+    "signIn": "Sign in",
+    "notify": "Stay informed"
+  },
+  "hero": {
+    "lineA": "All your properties, brought",
+    "lineB": "onto one",
+    "accent": "platform",
+    "lead": "Hostay brings bookings, guests, access, cleaning and owners together. For concierge teams, property managers and owners.",
+    "primary": "Explore Hostay",
+    "secondary": "Get launch updates",
+    "hello": "Hi, I'm Miftah! Let me tell you how I run my rentals."
+  },
+  "untangle": {
+    "chapters": [
+      {
+        "eyebrow": "The problem",
+        "title": "Calendars, messages, keys, cleaning…",
+        "lead": "…and a team stitching the pieces back together every day. Everything ends up tangled."
+      },
+      {
+        "eyebrow": "The search",
+        "title": "A spreadsheet, a WhatsApp group, a notebook…",
+        "lead": "You look for the right way to get organised. Each tool fixes one piece; none ties it all together."
+      },
+      {
+        "eyebrow": "The answer",
+        "title": "Then comes Hostay.",
+        "lead": "Bookings, guests, access, teams and owners: everything in one place. A clear mind again."
+      }
+    ],
+    "labels": [
+      "iCal calendars",
+      "Guest details",
+      "Access codes",
+      "Cleaning",
+      "Owners"
+    ],
+    "query": "how to manage my short-term rentals",
+    "methods": [
+      "A spreadsheet",
+      "A WhatsApp group",
+      "A paper notebook",
+      "One app per task"
+    ],
+    "found": "Hostay",
+    "end": "One platform",
+    "tab": "Search",
+    "app": "Schedule",
+    "appNote": "Everything in one place."
+  },
+  "modules": {
+    "eyebrow": "Features",
+    "title": "Seven modules, one platform.",
+    "lead": "Each module hands off to the next. Hostay fits a handful of properties or a full portfolio.",
+    "items": [
+      {
+        "title": "Bookings",
+        "body": "Centralized through iCal sync or manual entry, in a single schedule."
+      },
+      {
+        "title": "Guest details",
+        "body": "Collected and validated automatically, with no chasing on your side."
+      },
+      {
+        "title": "Guest space",
+        "body": "A dedicated space with the house guide and access to the property."
+      },
+      {
+        "title": "Operations",
+        "body": "Check-ins, check-outs, cleaning and maintenance in one place."
+      },
+      {
+        "title": "Dashboards",
+        "body": "Clear indicators to run the business."
+      },
+      {
+        "title": "Tuya integration",
+        "body": "Connected locks, air conditioning and sensors, managed from Hostay."
+      },
+      {
+        "title": "Owners",
+        "body": "Visibility for them, control for you."
+      }
+    ],
+    "say": {
+      "intro": "Here's what helps me, every day.",
+      "lines": [
+        "My iCal calendars sync, and I add the rest by hand: one schedule.",
+        "My guests' details arrive already validated. No more chasing.",
+        "Each guest gets a space with the house guide and access to the property.",
+        "Check-ins, check-outs, cleaning, maintenance: all in one place.",
+        "Clear indicators, so I know where the business stands.",
+        "Connected locks, air conditioning and sensors: I manage them from Hostay.",
+        "My owners get visibility. I stay in control."
+      ],
+      "stay": "I'm still here. Any question? Click “Miftah is listening” at the bottom of the screen."
+    }
+  },
+  "how": {
+    "eyebrow": "How it works",
+    "title": "Three moments, from booking to owner.",
+    "lead": "Three steps and everything is in place. Hostay fits a handful of properties or a full portfolio.",
+    "card": "Getting started with Hostay",
+    "done": "steps",
+    "steps": [
+      {
+        "title": "Centralize",
+        "body": "iCal calendars sync and direct bookings are added by hand. Guest details are collected and validated automatically.",
+        "items": [
+          "iCal calendars synced",
+          "Direct bookings added",
+          "Guest details validated"
+        ]
+      },
+      {
+        "title": "Welcome",
+        "body": "Each guest gets a dedicated space with the house guide and access to the property.",
+        "items": [
+          "Dedicated guest space",
+          "House guide",
+          "Property access"
+        ]
+      },
+      {
+        "title": "Run it",
+        "body": "Check-ins, check-outs, cleaning and maintenance in one place. Owners get visibility while you stay in control.",
+        "items": [
+          "Check-ins and check-outs",
+          "Cleaning and maintenance",
+          "Owner visibility"
+        ]
+      }
+    ]
+  },
+  "product": {
+    "eyebrow": "Preview",
+    "title": "The schedule, at a glance.",
+    "lead": "Every booking, wherever it comes from, in a single schedule.",
+    "example": "Sample data",
+    "week": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "ical": "iCal",
+    "manual": "Manual",
+    "today": "Today"
+  },
+  "who": {
+    "eyebrow": "Who it's for",
+    "title": "Three roles, one platform.",
+    "items": [
+      {
+        "title": "Concierge teams",
+        "body": "The whole team on the same page, from schedule to field work. Owners get visibility, you stay in charge."
+      },
+      {
+        "title": "Property managers",
+        "body": "From a handful of properties to a full portfolio: one schedule, welcomed guests, connected devices."
+      },
+      {
+        "title": "Owners",
+        "body": "Follow your property and its activity without running the day to day."
+      }
+    ]
+  },
+  "morocco": {
+    "eyebrow": "Made in Morocco",
+    "title": "In Morocco. By Moroccans, for Moroccans.",
+    "lead": "Built for the reality of short-stay rentals in Morocco, from Tangier to Agadir.",
+    "atlantic": "Atlantic Ocean",
+    "med": "Mediterranean Sea",
+    "route": "From Tangier to Agadir"
+  },
+  "faq": {
+    "eyebrow": "Questions",
+    "title": "Frequently asked questions",
+    "items": [
+      {
+        "q": "What is Hostay?",
+        "a": "An all-in-one platform for concierge teams, property managers and owners of short-stay rentals: bookings, guest details, guest space, operations, dashboards, Tuya connected devices and owner visibility."
+      },
+      {
+        "q": "When will Hostay be available?",
+        "a": "Soon, starting with Morocco."
+      },
+      {
+        "q": "How do bookings come in?",
+        "a": "Through iCal sync of your listings' calendars, or by manual entry for direct bookings."
+      },
+      {
+        "q": "Which connected devices are supported?",
+        "a": "Hostay integrates with the Tuya ecosystem: locks, air conditioning and sensors."
+      },
+      {
+        "q": "What do owners see?",
+        "a": "They get visibility on their properties. Management stays in your hands."
+      },
+      {
+        "q": "Does Hostay work for a small number of properties?",
+        "a": "Yes. Hostay fits a handful of properties up to a full portfolio."
+      }
+    ]
+  },
+  "notify": {
+    "eyebrow": "Coming soon",
+    "title": "Hear about the launch.",
+    "lead": "Leave your email and we'll write when it opens. Nothing else.",
+    "email": "Email address",
+    "submit": "Notify me",
+    "sending": "Sending…",
+    "errEmail": "Enter a valid email, e.g. name@domain.com.",
+    "errNetwork": "Sending failed. Check your connection and try again.",
+    "errRate": "Too many attempts in a short time. Try again in a few minutes.",
+    "notConnected": "Sign-ups are not open yet. Come back very soon.",
+    "success": "Noted. We'll write to {email}."
+  },
+  "footer": {
+    "tagline": "The all-in-one platform for short-stay rentals.",
+    "origin": "In Morocco. By Moroccans, for Moroccans.",
+    "rights": "All rights reserved."
+  },
+  "miftah": {
+    "listening": "Miftah is listening",
+    "title": "Miftah",
+    "subtitle": "The Hostay assistant",
+    "demo": "Demo",
+    "demoNote": "Demo: answers are prepared in advance. This is not a real assistant yet.",
+    "placeholder": "Ask your question…",
+    "send": "Send",
+    "close": "Close",
+    "open": "Chat with Miftah",
+    "thinking": "Miftah is thinking…",
+    "greeting": "Hi, I'm Miftah! Ask me anything about Hostay: bookings, guests, access, cleaning, owners…",
+    "suggestions": [
+      "How do bookings come in?",
+      "What about smart locks?",
+      "When will Hostay be available?"
+    ],
+    "answers": {
+      "hello": "Hi! I'm Miftah. Ask me anything about Hostay: bookings, guests, access, cleaning, owners…",
+      "reservations": "Your bookings are centralized in a single schedule: iCal calendars sync, and you add direct bookings by hand.",
+      "guests": "Guest details are collected and validated automatically, with no chasing on your side. Each guest also gets a dedicated space with the house guide and access to the property.",
+      "access": "Hostay integrates with Tuya: connected locks, air conditioning and sensors are managed from the platform.",
+      "operations": "Check-ins, check-outs, cleaning and maintenance are in one place, for your whole team.",
+      "owners": "Your owners get visibility on what matters, while you stay in control.",
+      "price": "Pricing isn't published yet. Leave your email under “Stay in the loop” and we'll write when we open.",
+      "launch": "Hostay is coming soon to Morocco. Leave your email under “Stay in the loop” to hear first.",
+      "morocco": "Hostay is built in Morocco, for the reality of short-stay rentals, from Tangier to Agadir.",
+      "size": "Hostay fits a handful of properties or a full portfolio.",
+      "fallback": "Good question! In this demo I can answer about bookings, guests, access, cleaning, owners and the launch. Try one of the suggestions."
+    }
+  },
+  "day": {
+    "eyebrow": "A day with Hostay",
+    "title": "A turnover day, without running around.",
+    "lead": "Example: a riad in Marrakech, one guest leaving, another arriving.",
+    "example": "Sample day",
+    "events": [
+      {
+        "time": "08:00",
+        "title": "Check-out",
+        "body": "The guest leaves. Cleaning is already scheduled."
+      },
+      {
+        "time": "10:30",
+        "title": "Cleaning",
+        "body": "The team sees the task and the property to prepare."
+      },
+      {
+        "time": "14:00",
+        "title": "Welcome",
+        "body": "The next guest gets their space: the house guide and access to the property."
+      },
+      {
+        "time": "16:00",
+        "title": "Check-in",
+        "body": "Their details are already collected and validated."
+      },
+      {
+        "time": "20:00",
+        "title": "Owner",
+        "body": "The owner has visibility on the day. You stay in control."
+      }
+    ]
+  },
+  "text": {
+    "label": "Text version",
+    "title": "Hostay · Text version",
+    "intro": "This page presents all of the site's content as plain text, with no animation: for reading, search engines and AI agents.",
+    "back": "See the animated page",
+    "story": "The story",
+    "features": "Features",
+    "how": "How it works",
+    "day": "A day with Hostay",
+    "who": "Who it is for",
+    "morocco": "Made in Morocco",
+    "faq": "Frequently asked questions",
+    "contact": "Launch and contact",
+    "contactBody": "Hostay is coming soon to Morocco. To hear when it opens, leave your email on the home page. Existing customers sign in at",
+    "cities": "Cities"
+  }
+}

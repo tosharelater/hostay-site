@@ -1,0 +1,319 @@
+---
+import Logo from './Logo.astro';
+import { href } from '../lib/paths';
+import { dict, META, LOCALES, type Locale } from '../i18n';
+import { SITE } from '../data/site';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale);
+const links = [
+  { href: '#modules', label: t.nav.modules },
+  { href: '#how', label: t.nav.how },
+  { href: '#who', label: t.nav.who },
+  { href: '#faq', label: t.nav.faq }
+];
+---
+
+<header class="head" data-head>
+  <div class="bar">
+    <a class="brand" href={href(META[locale].home)} aria-label={t.a11y.home}>
+      <Logo size={24} class="brand-mark" />
+      <span>Host<span class="brand-soft">ay</span></span>
+    </a>
+
+    <nav class="nav" id="site-nav" aria-label={t.a11y.nav} data-nav>
+      <ul>{links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+      <a class="btn btn-solid nav-cta" href={SITE.appUrl} rel="noopener">{t.nav.signIn}</a>
+    </nav>
+
+    <div class="right">
+      <a class="textv" href={href(META[locale].text)} title={t.text.intro}>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2.5h7l3 3v8H3z M10 2.5v3h3 M5.5 8h5 M5.5 10.5h5" /></svg>
+        <span>{t.text.label}</span>
+      </a>
+      <nav class="lang" aria-label={t.a11y.lang}>
+        {
+          LOCALES.map((l) => (
+            <a href={href(META[l].home)} hreflang={META[l].lang} lang={META[l].lang} aria-current={l === locale ? 'true' : undefined}>
+              {META[l].label}
+            </a>
+          ))
+        }
+      </nav>
+      <a class="btn btn-solid signin" href={SITE.appUrl} rel="noopener">{t.nav.signIn}</a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="site-nav" data-burger data-open={t.a11y.menuOpen} data-close={t.a11y.menuClose}>
+        <span class="sr-only" data-burger-label>{t.a11y.menuOpen}</span>
+        <i></i><i></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const head = document.querySelector<HTMLElement>('[data-head]');
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+  const label = document.querySelector<HTMLElement>('[data-burger-label]');
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  if (head && burger && label && nav) {
+    const set = (open: boolean) => {
+      burger.setAttribute('aria-expanded', String(open));
+      label.textContent = (open ? burger.dataset.close : burger.dataset.open) ?? '';
+      head.classList.toggle('open', open);
+      document.documentElement.classList.toggle('menu-open', open);
+    };
+    burger.addEventListener('click', () => set(burger.getAttribute('aria-expanded') !== 'true'));
+    nav.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) set(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && head.classList.contains('open')) {
+        set(false);
+        burger.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  /* plain text version of the page, for reading, search engines and AI agents */
+  .textv {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 34px;
+    padding: 0 11px;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .textv:hover {
+    border-style: solid;
+    color: var(--accent-deep);
+  }
+
+  .textv svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linejoin: round;
+  }
+
+  @media (max-width: 1100px) {
+    .textv span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    .textv {
+      width: 34px;
+      padding: 0;
+      justify-content: center;
+    }
+  }
+
+  .head {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    padding: 12px var(--gutter);
+    transition:
+      background-color 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+
+  :global(html.scrolled) .head {
+    background: rgba(242, 246, 253, 0.86);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 1px 0 var(--rule);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: min(1240px, 100%);
+    margin-inline: auto;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--ink);
+    font: 700 21px/1 var(--sans);
+    letter-spacing: -0.02em;
+  }
+
+  .brand :global(.brand-mark) {
+    color: var(--accent);
+  }
+
+  .brand-soft {
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: 26px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav a:not(.btn) {
+    position: relative;
+    padding: 6px 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .nav a:not(.btn)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ease);
+  }
+
+  .nav a:not(.btn):hover::after {
+    transform: scaleX(1);
+  }
+
+  .nav-cta {
+    display: none;
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lang {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--panel);
+  }
+
+  .lang a {
+    min-width: 32px;
+    padding: 6px 6px;
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .lang a[aria-current='true'] {
+    background: var(--white);
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(23, 26, 58, 0.12);
+  }
+
+  .burger {
+    display: none;
+    width: 42px;
+    height: 42px;
+    place-content: center;
+    gap: 5px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--panel);
+    cursor: pointer;
+  }
+
+  .burger i {
+    display: block;
+    width: 16px;
+    height: 1.5px;
+    background: var(--ink);
+    transition: transform 0.3s var(--ease);
+  }
+
+  .head.open .burger i:first-of-type {
+    transform: translateY(3.25px) rotate(45deg);
+  }
+
+  .head.open .burger i:last-of-type {
+    transform: translateY(-3.25px) rotate(-45deg);
+  }
+
+  @media (max-width: 880px) {
+    .burger {
+      display: grid;
+    }
+
+    .signin {
+      display: none;
+    }
+
+    .nav {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 28px;
+      padding: 88px 24px 40px;
+      background: var(--panel);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 0.3s ease,
+        visibility 0.3s;
+    }
+
+    .head.open .nav {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav ul {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav a:not(.btn) {
+      font: 400 34px/1.2 var(--serif);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+    }
+  }
+
+  :global(html.menu-open) {
+    overflow: hidden;
+  }
+</style>

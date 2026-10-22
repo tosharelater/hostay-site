@@ -1,0 +1,15 @@
+---
+/** The real Hostay mark (house + H + smile), read from the source SVG, drawn in currentColor. */
+import logoSvg from '../assets/hostay-logo.svg?raw';
+
+interface Props {
+  size?: number;
+  class?: string;
+}
+const { size = 26, class: className } = Astro.props;
+const paths = [...logoSvg.matchAll(/\sd="([^"]+)"/g)].map((m) => m[1] ?? '');
+---
+
+<svg class={className} width={size * (1418.03 / 1522.28)} height={size} viewBox="0 0 1418.03 1522.28" aria-hidden="true" focusable="false">
+  {paths.map((d) => <path d={d} fill="currentColor" />)}
+</svg>

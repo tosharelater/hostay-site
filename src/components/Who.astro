@@ -1,0 +1,77 @@
+---
+import ModuleIcon from './ModuleIcon.astro';
+import { dict, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale).who;
+// Icon per audience: operations for concierge teams, dashboards for managers, the riad for owners.
+const icons = [3, 4, 6];
+---
+
+<section class="sec who" id="who" aria-labelledby="who-title">
+  <div class="wrap">
+    <div class="head center" data-reveal>
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h2 class="h2" id="who-title">{t.title}</h2>
+    </div>
+    <ul class="grid">
+      {
+        t.items.map((a, i) => (
+          <li class="card" data-reveal style={`--d:${i * 110}ms`}>
+            <div class="art">
+              <ModuleIcon index={icons[i] ?? 0} />
+            </div>
+            <h3>{a.title}</h3>
+            <p>{a.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin: 52px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    padding: 26px 26px 30px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: var(--panel);
+    text-align: center;
+  }
+
+  .art {
+    width: 150px;
+    height: 132px;
+    margin: 0 auto 18px;
+  }
+
+  h3 {
+    font-size: 26px;
+  }
+
+  p {
+    max-width: 300px;
+    margin: 10px auto 0;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

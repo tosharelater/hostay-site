@@ -1,0 +1,210 @@
+---
+/**
+ * "Restez informé": one email field. Client checks are a convenience only; the endpoint
+ * (PUBLIC_NOTIFY_ENDPOINT) must validate again, rate-limit and filter spam.
+ */
+import Logo from './Logo.astro';
+import { dict, type Locale } from '../i18n';
+import { SITE } from '../data/site';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale).notify;
+---
+
+<section class="sec notify" id="notify" aria-labelledby="notify-title">
+  <div class="card" data-reveal>
+    <span class="mark" aria-hidden="true"><Logo size={26} /></span>
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h2 class="h2" id="notify-title">{t.title}</h2>
+    <p class="lede">{t.lead}</p>
+
+    <form
+      novalidate
+      data-notify
+      data-endpoint={SITE.notifyEndpoint}
+      data-lang={locale}
+      data-err-email={t.errEmail}
+      data-err-network={t.errNetwork}
+      data-err-rate={t.errRate}
+      data-not-connected={t.notConnected}
+      data-success={t.success}
+      data-sending={t.sending}
+    >
+      <label class="sr-only" for="notify-email">{t.email}</label>
+      <div class="field">
+        <input id="notify-email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="120" placeholder={t.email} required aria-describedby="notify-msg" />
+        <button type="submit" class="btn btn-ink"><span data-label>{t.submit}</span></button>
+      </div>
+      <div class="trap" aria-hidden="true">
+        <label for="notify-website">Website</label>
+        <input id="notify-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <p class="msg" id="notify-msg" role="status" aria-live="polite" data-msg></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const EMAIL = /^[^\s@]{1,64}@[^\s@]+\.[^\s@]{2,}$/;
+  document.querySelectorAll<HTMLFormElement>('[data-notify]').forEach((form) => {
+    const input = form.querySelector<HTMLInputElement>('input[name="email"]');
+    const trap = form.querySelector<HTMLInputElement>('input[name="website"]');
+    const msg = form.querySelector<HTMLElement>('[data-msg]');
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const label = form.querySelector<HTMLElement>('[data-label]');
+    if (!input || !msg || !button || !label) return;
+    const say = (text: string, kind: 'error' | 'ok' | 'info') => {
+      msg.textContent = text;
+      msg.dataset.kind = kind;
+    };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (trap?.value || form.dataset.busy === 'true') return;
+      const email = input.value.trim();
+      if (!EMAIL.test(email) || email.length > 120) {
+        input.setAttribute('aria-invalid', 'true');
+        say(form.dataset.errEmail ?? '', 'error');
+        input.focus();
+        return;
+      }
+      input.setAttribute('aria-invalid', 'false');
+      const endpoint = (form.dataset.endpoint ?? '').trim();
+      if (!endpoint) {
+        say(form.dataset.notConnected ?? '', 'info');
+        return;
+      }
+      form.dataset.busy = 'true';
+      button.disabled = true;
+      const idle = label.textContent ?? '';
+      label.textContent = form.dataset.sending ?? idle;
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ email, lang: form.dataset.lang ?? 'fr' })
+        });
+        if (res.status === 429) say(form.dataset.errRate ?? '', 'error');
+        else if (!res.ok) say(form.dataset.errNetwork ?? '', 'error');
+        else {
+          say((form.dataset.success ?? '').replace('{email}', email), 'ok');
+          input.value = '';
+        }
+      } catch {
+        say(form.dataset.errNetwork ?? '', 'error');
+      } finally {
+        form.dataset.busy = 'false';
+        button.disabled = false;
+        label.textContent = idle;
+      }
+    });
+  });
+</script>
+
+<style>
+  .card {
+    position: relative;
+    width: min(760px, 100%);
+    margin-inline: auto;
+    padding: clamp(36px, 6vw, 64px) clamp(22px, 5vw, 56px);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    background:
+      radial-gradient(120% 80% at 50% 0%, var(--accent-soft), transparent 60%),
+      var(--panel);
+    text-align: center;
+  }
+
+  .mark {
+    display: inline-grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 18px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 14px;
+    background: var(--white);
+    color: var(--accent);
+    box-shadow: 4px 4px 0 var(--il-slate-3);
+  }
+
+  .lede {
+    margin-inline: auto;
+  }
+
+  form {
+    margin-top: 28px;
+  }
+
+  .field {
+    display: flex;
+    gap: 8px;
+    max-width: 480px;
+    margin-inline: auto;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--white);
+  }
+
+  .field:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  input[type='email'] {
+    flex: 1;
+    min-width: 0;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    outline: none;
+  }
+
+  input[aria-invalid='true'] {
+    color: #a62d27;
+  }
+
+  .trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .msg {
+    min-height: 1.5em;
+    margin-top: 12px;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .msg[data-kind='error'] {
+    color: #a62d27;
+  }
+
+  .msg[data-kind='ok'] {
+    color: var(--accent-deep);
+  }
+
+  button:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  @media (max-width: 480px) {
+    .field {
+      flex-direction: column;
+    }
+
+    .field input {
+      min-height: 44px;
+    }
+  }
+</style>
