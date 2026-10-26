@@ -11,7 +11,7 @@ export default defineConfig({
   site,
   base,
   output: 'static',
-  trailingSlash: 'never',
+  trailingSlash: 'ignore', // GitHub Pages serves /faq/ while links use /faq: accept both
   build: { format: 'directory', inlineStylesheets: 'auto' },
   i18n: { defaultLocale: 'fr', locales: ['fr', 'en'], routing: { prefixDefaultLocale: false } },
   integrations: [sitemap()],

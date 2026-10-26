@@ -8,15 +8,8 @@ export const SITE = {
   notifyEndpoint: (env.PUBLIC_NOTIFY_ENDPOINT ?? '').trim()
 } as const;
 
-/** Cities named in the strip and the Morocco section. */
-/** Cities in the order of the "Made in Morocco" route, from Tangier to Agadir. */
-export const CITIES: Record<'fr' | 'en', readonly string[]> = {
-  fr: ['Tanger', 'Fès', 'Rabat', 'Casablanca', 'Marrakech', 'Essaouira', 'Taghazout', 'Agadir'],
-  en: ['Tangier', 'Fez', 'Rabat', 'Casablanca', 'Marrakech', 'Essaouira', 'Taghazout', 'Agadir']
-};
-
 /** Sample bookings for the schedule preview (fictional, labelled as sample data). */
-export const SAMPLE_PROPERTIES = ['Riad Yasmine', 'Appart Gueliz', 'Villa Taghazout', 'Dar Anfa'] as const;
+export const SAMPLE_PROPERTIES = ['Riad Yasmine', 'Appart Mimosa', 'Villa Oliveraie', 'Dar Zitoun'] as const;
 export const SAMPLE_BOOKINGS: readonly { row: number; start: number; nights: number; guest: string; source: 'ical' | 'manual' }[] = [
   { row: 0, start: 0, nights: 3, guest: 'Sara B.', source: 'ical' },
   { row: 0, start: 4, nights: 3, guest: 'Lukas M.', source: 'ical' },

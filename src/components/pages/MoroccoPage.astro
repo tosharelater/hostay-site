@@ -1,0 +1,181 @@
+---
+import PageHero from '../PageHero.astro';
+import PageCta from '../PageCta.astro';
+import { dict, type Locale } from '../../i18n';
+import MoroccoMap from '../MoroccoMap.astro';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale);
+const p = t.pages.morocco;
+const m = t.morocco;
+---
+
+<article class="mp">
+  <PageHero symbol="morocco" eyebrow={p.eyebrow} title={p.title} lead={p.lead} />
+
+  <section class="sec manifesto" aria-labelledby="man-title">
+    <div class="wrap man-grid">
+      <div data-reveal>
+        <h2 class="h2" id="man-title">{p.manifestoTitle}</h2>
+        <p class="lede wide">{p.manifestoBody}</p>
+      </div>
+      <ul class="pillars">
+        {
+          p.pillars.map((item, i) => (
+            <li class="glow" data-reveal="right" style={`--d:${i * 70}ms`}>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec country" aria-labelledby="country-title">
+    <div class="wrap layout">
+      <div class="list-col" data-reveal="left">
+        <h2 class="h2" id="country-title">{p.countryTitle}</h2>
+        <p class="lede">{p.countryLead}</p>
+        <p class="tagline"><i aria-hidden="true"></i>{m.tagline}</p>
+        <ul class="points">
+          {
+            p.points.map((pt, i) => (
+              <li class="glow" data-reveal="left" style={`--d:${120 + i * 90}ms`}>
+                <span class="n">0{i + 1}</span>
+                <div>
+                  <h3>{pt.title}</h3>
+                  <p>{pt.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <figure class="map" data-reveal="zoom" style="--d:100ms">
+        <MoroccoMap id="page-map" name={t.nav.morocco} mode="reveal" />
+      </figure>
+    </div>
+  </section>
+
+  <PageCta locale={locale} />
+</article>
+
+<style>
+  .lede.wide {
+    max-width: 38rem;
+    font-size: 18.5px;
+  }
+
+  .man-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 36px 48px;
+    align-items: start;
+  }
+
+  .pillars {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
+
+  .pillars li {
+    padding: 22px 22px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: var(--panel);
+  }
+
+  .pillars h3 {
+    font-size: 22px;
+  }
+
+  .pillars p {
+    margin-top: 8px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  .country {
+    background: var(--panel);
+    border-block: 1px solid var(--rule);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    gap: 40px 56px;
+    align-items: center;
+  }
+
+  .tagline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+    color: var(--accent-deep);
+    font: italic 400 22px/1.2 var(--serif);
+  }
+
+  .tagline i {
+    width: 34px;
+    border-top: 2.5px dashed var(--accent);
+  }
+
+  .points {
+    display: grid;
+    gap: 12px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .points li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    padding: 18px 20px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: var(--white);
+  }
+
+  .points .n {
+    color: var(--accent);
+    font: italic 400 18px/1.2 var(--serif);
+  }
+
+  .points h3 {
+    font-size: 21px;
+  }
+
+  .points p {
+    margin-top: 6px;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .map {
+    width: min(100%, 480px);
+    margin: 0 auto;
+  }
+
+  @media (max-width: 900px) {
+    .man-grid,
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    .map {
+      width: min(86%, 420px);
+    }
+  }
+</style>

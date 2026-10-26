@@ -1,0 +1,56 @@
+---
+/** Soft end-of-page invite back to home notify / sign-in. */
+import { href } from '../lib/paths';
+import { dict, META, type Locale } from '../i18n';
+import { SITE } from '../data/site';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale);
+const home = href(META[locale].home);
+---
+
+<aside class="cta sec" data-reveal>
+  <div class="wrap band">
+    <div>
+      <p class="eyebrow">{t.notify.eyebrow}</p>
+      <h2 class="h2">{t.notify.title}</h2>
+      <p class="lede">{t.notify.lead}</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn-ink" href={`${home}#notify`}>{t.nav.notify}</a>
+      <a class="btn btn-offset" href={SITE.appUrl} rel="noopener">{t.nav.signIn}</a>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .cta {
+    padding-block: clamp(56px, 8vw, 88px);
+  }
+
+  .band {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px 40px;
+    padding: clamp(28px, 4vw, 40px);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: var(--panel);
+    box-shadow: 8px 8px 0 var(--accent-soft);
+  }
+
+  .h2 {
+    font-size: clamp(26px, 3vw, 36px);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>

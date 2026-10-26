@@ -12,9 +12,11 @@
     "menuClose": "Close menu"
   },
   "nav": {
+    "home": "Home",
     "modules": "Features",
     "how": "How it works",
     "who": "Who it's for",
+    "morocco": "Morocco",
     "faq": "FAQ",
     "signIn": "Sign in",
     "notify": "Stay informed"
@@ -189,10 +191,10 @@
   "morocco": {
     "eyebrow": "Made in Morocco",
     "title": "In Morocco. By Moroccans, for Moroccans.",
-    "lead": "Built for the reality of short-stay rentals in Morocco, from Tangier to Agadir.",
+    "lead": "Built for the reality of short-stay rentals, everywhere in Morocco.",
     "atlantic": "Atlantic Ocean",
     "med": "Mediterranean Sea",
-    "route": "From Tangier to Agadir"
+    "tagline": "Everywhere in Morocco"
   },
   "faq": {
     "eyebrow": "Questions",
@@ -268,7 +270,7 @@
       "owners": "Your owners get visibility on what matters, while you stay in control.",
       "price": "Pricing isn't published yet. Leave your email under “Stay in the loop” and we'll write when we open.",
       "launch": "Hostay is coming soon to Morocco. Leave your email under “Stay in the loop” to hear first.",
-      "morocco": "Hostay is built in Morocco, for the reality of short-stay rentals, from Tangier to Agadir.",
+      "morocco": "Hostay is built in Morocco, for the reality of short-stay rentals, everywhere in the country.",
       "size": "Hostay fits a handful of properties or a full portfolio.",
       "fallback": "Good question! In this demo I can answer about bookings, guests, access, cleaning, owners and the launch. Try one of the suggestions."
     }
@@ -276,7 +278,7 @@
   "day": {
     "eyebrow": "A day with Hostay",
     "title": "A turnover day, without running around.",
-    "lead": "Example: a riad in Marrakech, one guest leaving, another arriving.",
+    "lead": "Example: a riad, one guest leaving, another arriving.",
     "example": "Sample day",
     "events": [
       {
@@ -319,7 +321,220 @@
     "morocco": "Made in Morocco",
     "faq": "Frequently asked questions",
     "contact": "Launch and contact",
-    "contactBody": "Hostay is coming soon to Morocco. To hear when it opens, leave your email on the home page. Existing customers sign in at",
-    "cities": "Cities"
+    "contactBody": "Hostay is coming soon to Morocco. To hear when it opens, leave your email on the home page. Existing customers sign in at"
+  },
+  "notFound": {
+    "metaTitle": "Page not found · Hostay",
+    "metaDescription": "This page does not exist. Head back to the Hostay home page, or ask Miftah for the way.",
+    "eyebrow": "404",
+    "title": "This page took the keys.",
+    "lead": "That address is missing — or gone. Miftah can put you back on the path.",
+    "bubble": "Hmm… I can't find that page. Try home, or ask me a question.",
+    "home": "Back to home",
+    "ask": "Talk to Miftah",
+    "linksLabel": "Or go here"
+  },
+  "pages": {
+    "product": {
+      "eyebrow": "Product",
+      "title": "The whole job, on one platform.",
+      "lead": "Bookings, guests, access, operations, dashboards, Tuya and owners — seven modules that hand off to each other, without a spreadsheet or a WhatsApp group.",
+      "introTitle": "What Hostay replaces",
+      "introBody": "Scattered calendars, crossed wires, access codes in a notebook, cleaning in another tool. Hostay puts it in one place so the team sees the same thing.",
+      "promises": [
+        {
+          "title": "One schedule",
+          "body": "iCal and manual entries in a single view."
+        },
+        {
+          "title": "One guest thread",
+          "body": "Validated details, dedicated space, property access."
+        },
+        {
+          "title": "One team",
+          "body": "Shared check-ins, cleaning and interventions."
+        }
+      ],
+      "modulesTitle": "The seven modules",
+      "modulesLead": "Each one does a precise job. Together they cover a turnover day.",
+      "details": [
+        "Sync your listings and add the rest by hand: one schedule, readable for the whole team.",
+        "Guests submit their details; Hostay validates them without you chasing anyone.",
+        "House guide, instructions and access: guests get a dedicated space; you stay in control.",
+        "Check-ins, check-outs, cleaning and interventions: a clear queue for the field.",
+        "Occupancy, activity, pressure points: indicators so you decide without a spreadsheet.",
+        "Tuya locks, AC and sensors managed from Hostay when it matters.",
+        "Owners see what counts; operations stay in your hands."
+      ],
+      "flowTitle": "From calendar to owner",
+      "flowLead": "Three beats to set Hostay up, from a few homes to a full portfolio.",
+      "scheduleTitle": "The schedule at a glance",
+      "scheduleLead": "Every booking, wherever it comes from, in one schedule — sample data below."
+    },
+    "about": {
+      "eyebrow": "Who it's for",
+      "title": "Three roles. One platform.",
+      "lead": "Concierge teams, managers and owners don't do the same job — Hostay gives them a shared base without giving away control.",
+      "missionTitle": "Why Hostay exists",
+      "missionBody": "Short-stay rentals in Morocco deserve better than a pile of tools. Hostay is built here, for the field: tight turnovers, mixed teams, owners who need to stay informed.",
+      "audiencesTitle": "Who Hostay is for",
+      "audiences": [
+        {
+          "title": "Concierge teams",
+          "body": "From schedule to field, the whole team shares one view. Owners get visibility; you keep the ops.",
+          "points": [
+            "Shared schedule",
+            "Ops queue",
+            "Owner visibility"
+          ]
+        },
+        {
+          "title": "Managers",
+          "body": "From a few homes to a full portfolio: one schedule, welcomed guests, connected devices when you need them.",
+          "points": [
+            "iCal + manual",
+            "Guest space",
+            "Optional Tuya"
+          ]
+        },
+        {
+          "title": "Owners",
+          "body": "Follow your property and activity without carrying the day-to-day. Management stays with the concierge or manager.",
+          "points": [
+            "Clear view",
+            "No micro-management",
+            "Trust"
+          ]
+        }
+      ],
+      "principlesTitle": "What we refuse",
+      "principles": [
+        {
+          "title": "One more app that connects nothing",
+          "body": "A tool per task always ends up contradicting itself."
+        },
+        {
+          "title": "A black box for owners",
+          "body": "They need to see — not to run everything."
+        },
+        {
+          "title": "A Silicon Valley copy-paste",
+          "body": "Hostay is made for Morocco, not the other way around."
+        }
+      ]
+    },
+    "morocco": {
+      "eyebrow": "Made in Morocco",
+      "title": "In Morocco. By Moroccans, for Moroccans.",
+      "lead": "From north to south, short-stay rentals have their own pace. Hostay is designed for Morocco, not another market.",
+      "manifestoTitle": "Built for the field",
+      "manifestoBody": "Turnovers, AC, access, teams on WhatsApp, owners to reassure: that isn't a detail. It is the job. Hostay starts there.",
+      "pillars": [
+        {
+          "title": "Language and habits",
+          "body": "A clear French interface for teams that move fast."
+        },
+        {
+          "title": "Networks and access",
+          "body": "iCal, manual entry, Tuya: what the market already uses."
+        },
+        {
+          "title": "Local trust",
+          "body": "Built here, with owners and guests in mind."
+        }
+      ],
+      "countryTitle": "All of Morocco, one platform",
+      "countryLead": "Wherever your properties are in Morocco, they are run in one place, with the same team and the same schedule.",
+      "points": [
+        {
+          "title": "From north to south",
+          "body": "One platform, wherever your properties are."
+        },
+        {
+          "title": "From the coast inland",
+          "body": "Riads, apartments, villas: every property has its place in the same schedule."
+        },
+        {
+          "title": "Designed here",
+          "body": "Built in Morocco, with the reality on the ground in mind."
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "Questions",
+      "title": "Straight answers.",
+      "lead": "Product, launch, bookings, Tuya, owners, portfolio size — what we get asked most.",
+      "groups": [
+        {
+          "title": "Product",
+          "items": [
+            {
+              "q": "What is Hostay?",
+              "a": "An all-in-one platform for concierge teams, managers and short-stay owners: bookings, guest details, guest space, operations, dashboards, Tuya devices and owner visibility."
+            },
+            {
+              "q": "Does Hostay work for a small number of homes?",
+              "a": "Yes. Hostay scales from a few properties to a full portfolio."
+            },
+            {
+              "q": "Do I need to connect everything on day one?",
+              "a": "No. Start with the schedule and guests, then add operations, dashboards or Tuya when you're ready."
+            }
+          ]
+        },
+        {
+          "title": "Bookings and guests",
+          "items": [
+            {
+              "q": "How do bookings arrive?",
+              "a": "By syncing iCal calendars from your listings, or by manual entry for direct bookings."
+            },
+            {
+              "q": "What is in the guest space?",
+              "a": "The house guide and property access, in a dedicated space — without multiplying messages."
+            }
+          ]
+        },
+        {
+          "title": "Devices and owners",
+          "items": [
+            {
+              "q": "Which connected devices are supported?",
+              "a": "Hostay integrates with the Tuya ecosystem: locks, air conditioning and sensors."
+            },
+            {
+              "q": "What do owners see?",
+              "a": "They get visibility on their properties. Management stays in your hands."
+            }
+          ]
+        },
+        {
+          "title": "Launch",
+          "items": [
+            {
+              "q": "When will Hostay be available?",
+              "a": "Soon, starting in Morocco. Leave your email to be notified at launch."
+            },
+            {
+              "q": "Are prices published yet?",
+              "a": "Not yet. Join “Stay informed”: we'll write when we open."
+            }
+          ]
+        }
+      ],
+      "search": "Search a question…",
+      "empty": "No question matches. Try another word, or ask Miftah."
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Three beats, from booking to owner.",
+      "lead": "Centralise, welcome, run — a simple sequence to set Hostay up without changing everything overnight.",
+      "stepsTitle": "The sequence",
+      "stepsLead": "Each step unlocks the next. You move at the pace of your portfolio.",
+      "dayTitle": "A turnover day",
+      "dayLead": "Example: a riad, one guest leaving, another arriving — without running everywhere.",
+      "afterTitle": "Then",
+      "afterBody": "Once the thread is in place, modules plug in: dashboards, Tuya, owner visibility. The core stays the same schedule."
+    }
   }
 }

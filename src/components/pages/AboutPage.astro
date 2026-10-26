@@ -1,0 +1,249 @@
+---
+import PageHero from '../PageHero.astro';
+import PageCta from '../PageCta.astro';
+import ModuleIcon from '../ModuleIcon.astro';
+import { dict, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const p = dict(locale).pages.about;
+const icons = [3, 4, 6];
+---
+
+<article class="ap">
+  <PageHero symbol="about" eyebrow={p.eyebrow} title={p.title} lead={p.lead} />
+
+  <section class="sec mission" aria-labelledby="mission-title">
+    <div class="wrap split" data-reveal>
+      <h2 class="h2" id="mission-title">{p.missionTitle}</h2>
+      <p class="lede wide">{p.missionBody}</p>
+    </div>
+  </section>
+
+  <section class="sec audiences" aria-labelledby="aud-title">
+    <div class="wrap">
+      <h2 class="h2" id="aud-title" data-reveal>{p.audiencesTitle}</h2>
+      <div class="bands">
+        {
+          p.audiences.map((a, i) => (
+            <div class:list={['band', i % 2 ? 'flip' : '']} data-reveal={i % 2 ? 'right' : 'left'} style={`--d:${i * 80}ms`}>
+              <div class="row">
+                <div class="art" aria-hidden="true">
+                  <ModuleIcon index={icons[i] ?? 0} />
+                </div>
+                <div class="copy">
+                  <span class="idx">0{i + 1}</span>
+                  <h3>{a.title}</h3>
+                  <p>{a.body}</p>
+                  <ul>
+                    {a.points.map((pt) => (
+                      <li>{pt}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="sec principles" aria-labelledby="pr-title">
+    <div class="wrap">
+      <h2 class="h2" id="pr-title" data-reveal>{p.principlesTitle}</h2>
+      <ol class="pr-grid">
+        {
+          p.principles.map((item, i) => (
+            <li class="glow" data-reveal="zoom" style={`--d:${i * 70}ms`}>
+              <span class="n">0{i + 1}</span>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <PageCta locale={locale} />
+</article>
+
+<style>
+  /* title on the left, the story on the right, on the page grid like the other sections */
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 24px 56px;
+    align-items: start;
+  }
+
+  .split .lede {
+    margin-top: 6px;
+  }
+
+  @media (max-width: 860px) {
+    .split {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .lede.wide {
+    max-width: none;
+    font-size: 19px;
+    line-height: 1.65;
+  }
+
+  .mission {
+    padding-bottom: clamp(40px, 6vw, 64px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .audiences {
+    padding-top: clamp(48px, 6vw, 72px);
+  }
+
+  .center {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .bands {
+    display: grid;
+    gap: 0;
+  }
+
+  .band {
+    padding: clamp(40px, 6vw, 64px) 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .band:nth-child(even) {
+    background: var(--panel);
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 36px 48px;
+    align-items: center;
+    width: min(var(--wrap), 100%);
+    margin-inline: auto;
+  }
+
+  .band.flip .row {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+
+  .band.flip .art {
+    order: 2;
+  }
+
+  .art {
+    width: min(100%, 260px);
+    margin-inline: auto;
+    padding: 28px;
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    background: var(--white);
+    box-shadow: 8px 8px 0 var(--accent-soft);
+  }
+
+  .idx {
+    color: var(--accent);
+    font: italic 400 18px/1 var(--serif);
+  }
+
+  .copy h3 {
+    margin-top: 10px;
+    font-size: clamp(30px, 4vw, 44px);
+  }
+
+  .copy > p {
+    max-width: 38rem;
+    margin-top: 14px;
+    color: var(--ink-soft);
+    font-size: 17.5px;
+    line-height: 1.65;
+  }
+
+  .copy ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .copy ul li {
+    padding: 8px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--white);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  .principles {
+    background: var(--panel);
+    border-block: 1px solid var(--rule);
+  }
+
+  .principles .h2 {
+    margin-bottom: 28px;
+  }
+
+  .pr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pr-grid li {
+    padding: 26px 24px 28px;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: var(--white);
+  }
+
+  .n {
+    color: var(--accent);
+    font: italic 400 16px/1 var(--serif);
+  }
+
+  .pr-grid h3 {
+    margin-top: 10px;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  .pr-grid p {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  @media (max-width: 900px) {
+    .row,
+    .band.flip .row {
+      grid-template-columns: 1fr;
+    }
+
+    .band.flip .art {
+      order: 0;
+    }
+
+    .pr-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

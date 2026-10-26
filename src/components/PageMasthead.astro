@@ -1,0 +1,51 @@
+---
+/** Editorial page intro for standalone marketing pages (not used on home). */
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  titleId?: string;
+}
+const { eyebrow, title, lead, titleId = 'page-title' } = Astro.props;
+---
+
+<header class="mast" data-reveal>
+  <div class="wrap">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1 class="title" id={titleId}>{title}</h1>
+    <p class="lead">{lead}</p>
+    <div class="rule" aria-hidden="true"></div>
+  </div>
+</header>
+
+<style>
+  .mast {
+    padding: clamp(108px, 16vw, 148px) var(--gutter) clamp(40px, 6vw, 56px);
+    background:
+      radial-gradient(ellipse 80% 60% at 12% 0%, var(--accent-soft) 0%, transparent 55%),
+      linear-gradient(180deg, var(--panel) 0%, var(--page) 100%);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .title {
+    max-width: 16ch;
+    font: 400 clamp(36px, 5.2vw, 64px) / 1.05 var(--serif);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  .lead {
+    max-width: 34rem;
+    margin-top: 18px;
+    color: var(--ink-soft);
+    font-size: clamp(16px, 1.5vw, 18px);
+    line-height: 1.65;
+  }
+
+  .rule {
+    width: min(120px, 30%);
+    margin-top: 28px;
+    border-top: 1.5px dashed var(--accent-line);
+  }
+</style>

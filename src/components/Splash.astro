@@ -1,0 +1,157 @@
+---
+/**
+ * First-visit intro only: quiet logo mark, then fade out and remove from the DOM.
+ * Never persists across ClientRouter swaps (that was remounting a visible overlay).
+ * sessionStorage + head bootstrap keep it from returning on later pages.
+ */
+import Logo from './Logo.astro';
+---
+
+<div id="splash" class="splash" role="presentation" aria-hidden="true">
+  <div class="stage">
+    <span class="logo-wrap"><Logo size={64} class="logo" /></span>
+    <p class="word">Host<span>ay</span></p>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const key = 'hostay-splash';
+    const el = document.getElementById('splash');
+    const kill = () => {
+      root.classList.remove('splash-pending', 'splash-out');
+      root.classList.add('splash-done');
+      el?.remove();
+    };
+    let done = false;
+    try {
+      done = sessionStorage.getItem(key) === '1';
+    } catch (_) {}
+    if (done || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      kill();
+      return;
+    }
+    // Already finished earlier in this document lifetime
+    if (root.classList.contains('splash-done')) {
+      kill();
+      return;
+    }
+
+    root.classList.add('splash-pending');
+    const finish = () => {
+      root.classList.add('splash-out');
+      window.setTimeout(() => {
+        try {
+          sessionStorage.setItem(key, '1');
+        } catch (_) {}
+        kill();
+      }, 700);
+    };
+    const start = performance.now();
+    const min = 2200;
+    const go = () => {
+      window.setTimeout(finish, Math.max(0, min - (performance.now() - start)));
+    };
+    if (document.readyState === 'complete') go();
+    else window.addEventListener('load', go, { once: true });
+  })();
+</script>
+
+<style is:global>
+  .splash {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    background: var(--page);
+    transition:
+      opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0.7s;
+  }
+
+  .splash .stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    color: var(--accent);
+    animation: splash-enter 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .splash .logo-wrap {
+    display: grid;
+    place-items: center;
+    animation: splash-soft 2.2s ease-in-out infinite;
+  }
+
+  .splash .word {
+    margin: 0;
+    color: var(--ink);
+    font: 700 26px/1 var(--sans);
+    letter-spacing: -0.03em;
+  }
+
+  .splash .word span {
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+
+  html.splash-pending {
+    overflow: hidden;
+  }
+
+  html.splash-pending body > :not(#splash) {
+    opacity: 0;
+  }
+
+  html.splash-out .splash {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  html.splash-out body > :not(#splash),
+  html.splash-done body > :not(#splash) {
+    opacity: 1;
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html.splash-done .splash {
+    display: none !important;
+  }
+
+  @keyframes splash-enter {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes splash-soft {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.04);
+      opacity: 0.88;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .splash {
+      display: none !important;
+    }
+
+    html.splash-pending body > :not(#splash) {
+      opacity: 1 !important;
+    }
+  }
+</style>

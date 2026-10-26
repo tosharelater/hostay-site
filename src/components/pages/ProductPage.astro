@@ -1,0 +1,433 @@
+---
+import PageHero from '../PageHero.astro';
+import PageCta from '../PageCta.astro';
+import ModuleIcon from '../ModuleIcon.astro';
+import { dict, type Locale } from '../../i18n';
+import { SAMPLE_BOOKINGS, SAMPLE_PROPERTIES, SAMPLE_TODAY } from '../../data/site';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale);
+const p = t.pages.product;
+const modules = t.modules;
+const how = t.how;
+const product = t.product;
+---
+
+<article class="pp">
+  <PageHero symbol="product" eyebrow={p.eyebrow} title={p.title} lead={p.lead} />
+
+  <section class="sec intro" aria-labelledby="intro-title">
+    <div class="wrap intro-grid">
+      <div data-reveal>
+        <h2 class="h2" id="intro-title">{p.introTitle}</h2>
+        <p class="lede wide">{p.introBody}</p>
+      </div>
+      <ul class="promises">
+        {
+          p.promises.map((item, i) => (
+            <li class="glow" data-reveal="right" style={`--d:${i * 80}ms`}>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec mods" aria-labelledby="mods-title">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <h2 class="h2" id="mods-title">{p.modulesTitle}</h2>
+        <p class="lede">{p.modulesLead}</p>
+      </div>
+      <ol class="mod-grid">
+        {
+          modules.items.map((item, i) => (
+            <li class="mod glow" data-reveal="zoom" style={`--d:${(i % 3) * 70}ms`}>
+              <div class="art" aria-hidden="true">
+                <ModuleIcon index={i} />
+              </div>
+              <span class="num">0{i + 1}</span>
+              <h3>{item.title}</h3>
+              <p class="short">{item.body}</p>
+              <p class="detail">{p.details[i]}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec flow" aria-labelledby="flow-title">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <h2 class="h2" id="flow-title">{p.flowTitle}</h2>
+        <p class="lede">{p.flowLead}</p>
+      </div>
+      <ol class="flow-list" data-rail>
+        {
+          how.steps.map((s, i) => (
+            <li class="glow" data-reveal="left" style={`--d:${i * 90}ms`}>
+              <span class="idx">0{i + 1}</span>
+              <div>
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
+                <ul>
+                  {s.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec schedule" aria-labelledby="sched-title">
+    <div class="wrap sched-grid">
+      <div class="copy" data-reveal>
+        <h2 class="h2" id="sched-title">{p.scheduleTitle}</h2>
+        <p class="lede">{p.scheduleLead}</p>
+        <ul class="legend">
+          <li><i class="sw ical"></i>{product.ical}</li>
+          <li><i class="sw manual"></i>{product.manual}</li>
+        </ul>
+      </div>
+      <figure class="window" data-reveal="right" style="--d:100ms">
+        <div class="chrome" aria-hidden="true"><i></i><i></i><i></i><span class="tag">{product.example}</span></div>
+        <div class="cal" role="table" aria-label={product.title}>
+          <div class="row head" role="row">
+            <span role="columnheader"></span>
+            {product.week.map((d, i) => <span role="columnheader" class:list={{ today: i === SAMPLE_TODAY }}>{d}</span>)}
+          </div>
+          {
+            SAMPLE_PROPERTIES.map((name, r) => (
+              <div class="row" role="row">
+                <span class="prop" role="rowheader">{name}</span>
+                <div class="lane" role="cell">
+                  {SAMPLE_BOOKINGS.filter((b) => b.row === r).map((b) => (
+                    <span class:list={['bar', b.source]} style={`grid-column:${b.start + 1} / span ${Math.min(b.nights, 7 - b.start)};--b:${SAMPLE_BOOKINGS.indexOf(b)}`}>{b.guest}</span>
+                  ))}
+                  <span class="now" style={`grid-column:${SAMPLE_TODAY + 1}`} aria-hidden="true" />
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <PageCta locale={locale} />
+</article>
+
+<style>
+  .lede.wide {
+    max-width: 40rem;
+    font-size: 18px;
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 40px;
+    align-items: start;
+  }
+
+  .promises {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 14px;
+  }
+
+  .promises li {
+    padding: 22px 24px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: var(--panel);
+  }
+
+  .promises h3 {
+    font-size: 22px;
+  }
+
+  .promises p {
+    margin-top: 8px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  .sec-head {
+    margin-bottom: 40px;
+  }
+
+  .mods {
+    background: var(--panel);
+    border-block: 1px solid var(--rule);
+  }
+
+  .mod-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mod {
+    display: flex;
+    flex-direction: column;
+    padding: 26px 26px 28px;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: var(--white);
+  }
+
+  .mod:hover {
+    border-color: var(--accent-line);
+    box-shadow: 6px 6px 0 var(--accent-soft);
+  }
+
+  .art {
+    width: 130px;
+    height: 108px;
+  }
+
+  .num {
+    margin-top: 8px;
+    color: var(--accent);
+    font: italic 400 16px/1 var(--serif);
+  }
+
+  .mod h3 {
+    margin-top: 6px;
+    font-size: 26px;
+  }
+
+  .short {
+    margin-top: 8px;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .detail {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--rule);
+    color: var(--ink);
+    font-size: 15.5px;
+    line-height: 1.6;
+  }
+
+  .flow-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 16px;
+  }
+
+  .flow-list li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    padding: 28px 28px;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: var(--panel);
+  }
+
+  .idx {
+    color: var(--accent);
+    font: italic 400 36px/1 var(--serif);
+  }
+
+  .flow-list h3 {
+    font-size: 28px;
+  }
+
+  .flow-list p {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    font-size: 16.5px;
+    line-height: 1.6;
+  }
+
+  .flow-list ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .flow-list ul li {
+    display: inline;
+    padding: 7px 12px;
+    border: 1px dashed var(--line);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .sched-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 40px;
+    align-items: center;
+  }
+
+  .legend {
+    display: flex;
+    gap: 18px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sw {
+    width: 14px;
+    height: 10px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 3px;
+  }
+
+  .sw.ical,
+  .bar.ical {
+    background: var(--il-indigo-2);
+  }
+
+  .sw.manual,
+  .bar.manual {
+    background: var(--il-amber-2);
+  }
+
+  .window {
+    margin: 0;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 14px;
+    background: var(--white);
+    box-shadow:
+      10px 10px 0 -1px var(--il-slate-3),
+      10px 10px 0 0 var(--il-stroke);
+    overflow: hidden;
+  }
+
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-bottom: 1.5px solid var(--il-stroke);
+    background: var(--il-slate-3);
+  }
+
+  .chrome i {
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 50%;
+    background: var(--white);
+  }
+
+  .chrome .tag {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cal {
+    padding: 10px 16px 16px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    align-items: center;
+    min-height: 48px;
+    border-bottom: 1px dashed var(--rule);
+  }
+
+  .row:last-child {
+    border-bottom: 0;
+  }
+
+  .row.head {
+    grid-template-columns: 120px repeat(7, minmax(0, 1fr));
+    min-height: 34px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .row.head .today {
+    color: var(--accent-deep);
+  }
+
+  .prop {
+    padding-right: 10px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .lane {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 4px;
+    position: relative;
+    min-height: 36px;
+    align-items: center;
+  }
+
+  .bar {
+    z-index: 1;
+    padding: 6px 8px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .now {
+    position: absolute;
+    inset: 4px auto 4px;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0.55;
+  }
+
+  @media (max-width: 960px) {
+    .intro-grid,
+    .sched-grid,
+    .mod-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

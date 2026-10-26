@@ -1,6 +1,7 @@
 ---
 /** The whole home page for one locale: SEO head, sections in order, and the motion script. */
 import '../styles/global.css';
+import '../styles/transitions.css';
 import { href, abs } from '../lib/paths';
 import Header from './Header.astro';
 import Hero from './Hero.astro';
@@ -56,7 +57,7 @@ const ogImage = abs('/og.png');
     <a class="skip" href="#main">{t.a11y.skip}</a>
     <Header locale={locale} />
     <Guide locale={locale} />
-    <main id="main" tabindex="-1">
+    <main id="main" tabindex="-1" transition:name="page-main">
       <Hero locale={locale} />
       <Untangle locale={locale} />
       <Modules locale={locale} />

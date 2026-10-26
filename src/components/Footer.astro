@@ -3,20 +3,18 @@ import Logo from './Logo.astro';
 import { href } from '../lib/paths';
 import { dict, META, LOCALES, type Locale } from '../i18n';
 import { SITE } from '../data/site';
+import { siteFooterNav, type NavLink } from '../lib/pages';
 
 interface Props {
   locale: Locale;
+  links?: NavLink[];
+  localeHrefs?: Partial<Record<Locale, string>>;
 }
 const { locale } = Astro.props;
 const t = dict(locale);
 const year = new Date().getFullYear();
-const links = [
-  { href: '#modules', label: t.nav.modules },
-  { href: '#how', label: t.nav.how },
-  { href: '#who', label: t.nav.who },
-  { href: '#faq', label: t.nav.faq },
-  { href: '#notify', label: t.nav.notify }
-];
+const links = Astro.props.links ?? siteFooterNav(locale);
+const localeHref = (l: Locale) => Astro.props.localeHrefs?.[l] ?? href(META[l].home);
 ---
 
 <footer class="foot">
@@ -39,7 +37,7 @@ const links = [
   <div class="wrap base">
     <span>© {year} Hostay · hostayapp.com · {t.footer.rights}</span>
     <nav class="lang" aria-label={t.a11y.lang}>
-      {LOCALES.map((l) => <a href={href(META[l].home)} hreflang={META[l].lang} lang={META[l].lang} aria-current={l === locale ? 'true' : undefined}>{META[l].label}</a>)}
+      {LOCALES.map((l) => <a href={localeHref(l)} hreflang={META[l].lang} lang={META[l].lang} aria-current={l === locale ? 'true' : undefined}>{META[l].label}</a>)}
     </nav>
   </div>
 </footer>

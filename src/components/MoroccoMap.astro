@@ -1,0 +1,144 @@
+---
+/**
+ * The map of Morocco, whole, as line art: the outline draws itself, the land fills in, then
+ * the name appears. Kept simple: no marks, no sea names. `mode="scroll"` is driven by CSS variables a script sets
+ * (--draw, --fill, --mark from 0 to 1); `mode="reveal"` plays once when a parent gets `.in`.
+ */
+import { MW, MH, MOROCCO_D, LABEL } from '../lib/map';
+
+interface Props {
+  name: string;
+  mode?: 'scroll' | 'reveal' | 'static';
+  id: string;
+}
+const { name, mode = 'reveal', id } = Astro.props;
+const [lx, ly] = LABEL;
+---
+
+<div class="mmap" data-mode={mode}>
+  <svg viewBox={`0 0 ${MW} ${MH}`} aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id={`${id}-waves`} width="16" height="16" patternUnits="userSpaceOnUse">
+        <path class="wave" d="M0 8 Q4 5 8 8 T16 8" />
+      </pattern>
+      <radialGradient id={`${id}-sea-fade`} cx="0.3" cy="0.5" r="0.7">
+        <stop offset="0.45" stop-color="#fff" />
+        <stop offset="1" stop-color="#fff" stop-opacity="0" />
+      </radialGradient>
+      <mask id={`${id}-sea-mask`}><rect width={MW} height={MH} fill={`url(#${id}-sea-fade)`} /></mask>
+    </defs>
+    <rect class="sea" width={MW} height={MH} fill={`url(#${id}-waves)`} mask={`url(#${id}-sea-mask)`} />
+    <path class="shadow" d={MOROCCO_D} />
+    <path class="land" d={MOROCCO_D} />
+    <path class="outline" d={MOROCCO_D} pathLength="1" />
+    <g class="name">
+      <text class="label" x={lx} y={ly} text-anchor="middle">{name}</text>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .mmap {
+    position: relative;
+    --draw: 1;
+    --fill: 1;
+    --mark: 1;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .wave {
+    fill: none;
+    stroke: var(--accent-line);
+    stroke-width: 0.8;
+    opacity: 0.5;
+  }
+
+  .shadow {
+    fill: var(--accent-soft);
+    translate: 10px 12px;
+    opacity: calc(var(--fill) * 0.9);
+  }
+
+  .land {
+    fill: var(--il-cream);
+    opacity: var(--fill);
+  }
+
+  .outline {
+    fill: none;
+    stroke: var(--il-stroke);
+    stroke-width: 2.2;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--draw));
+  }
+
+  .name {
+    opacity: var(--mark);
+    translate: 0 calc((1 - var(--mark)) * 10px);
+  }
+
+  .label {
+    fill: var(--accent-deep);
+    font: italic 400 30px/1 var(--serif);
+    letter-spacing: 0.02em;
+  }
+
+  /* reveal: plays once when a parent becomes .in */
+  .mmap[data-mode='reveal'] {
+    --draw: 0;
+    --fill: 0;
+    --mark: 0;
+  }
+
+  .mmap[data-mode='reveal'] .outline {
+    transition: stroke-dashoffset 2.2s var(--ease);
+  }
+
+  .mmap[data-mode='reveal'] :is(.land, .shadow) {
+    transition: opacity 0.9s 1.2s ease;
+  }
+
+  .mmap[data-mode='reveal'] .name {
+    transition:
+      opacity 0.6s 1.8s ease,
+      translate 0.6s 1.8s var(--ease);
+  }
+
+  :global(.in) .mmap[data-mode='reveal'] .outline,
+  .mmap[data-mode='reveal']:global(.in) .outline {
+    stroke-dashoffset: 0;
+  }
+
+  :global(.in) .mmap[data-mode='reveal'] .land,
+  .mmap[data-mode='reveal']:global(.in) .land {
+    opacity: 1;
+  }
+
+  :global(.in) .mmap[data-mode='reveal'] .shadow,
+  .mmap[data-mode='reveal']:global(.in) .shadow {
+    opacity: 0.9;
+  }
+
+  :global(.in) .mmap[data-mode='reveal'] .name,
+  .mmap[data-mode='reveal']:global(.in) .name {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+
+  @media (prefers-reduced-motion: reduce) {
+    .mmap {
+      --draw: 1 !important;
+      --fill: 1 !important;
+      --mark: 1 !important;
+    }
+
+  }
+</style>

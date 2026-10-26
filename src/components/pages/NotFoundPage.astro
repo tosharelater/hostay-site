@@ -1,0 +1,433 @@
+---
+/**
+ * Editorial 404: Miftah looking around for the page in front of a large "404", a clear way
+ * home, the main pages as cards, plus the chat button.
+ */
+import { dict, META, type Locale } from '../../i18n';
+import { href } from '../../lib/paths';
+import { siteNav } from '../../lib/pages';
+import * as C from '../../lib/character';
+import { mouthAt } from '../../lib/untangle';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = dict(locale).notFound;
+const home = href(META[locale].home);
+const links = siteNav(locale);
+---
+
+<article class="nf">
+  <div class="wrap layout">
+    <div class="copy" data-reveal>
+      <span class="big" aria-hidden="true">404</span>
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h1 class="title">{t.title}</h1>
+      <p class="lead">{t.lead}</p>
+      <div class="actions">
+        <a class="btn btn-ink" href={home}>{t.home}</a>
+        <button type="button" class="btn btn-offset" data-nf-ask>{t.ask}</button>
+      </div>
+      <p class="or">{t.linksLabel}</p>
+      <ul class="links">
+        {
+          links.map((l, i) => (
+            <li data-reveal style={`--d:${200 + i * 60}ms`}>
+              <a class="glow" href={l.href}>
+                <span>{l.label}</span>
+                <i aria-hidden="true">→</i>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <figure class="miftah" aria-hidden="true">
+      <div class="bubble" data-reveal style="--d:120ms">
+        <p>{t.bubble}</p>
+      </div>
+      <div class="figure thinking" data-reveal style="--d:80ms">
+        <svg viewBox={`0 0 ${C.PW} ${C.FULL_H}`}>
+          <ellipse class="floor" cx="300" cy="1146" rx="230" ry="16" />
+          {C.TROUSERS.map((d) => <path class="trousers" d={d} />)}
+          {C.SHOES.map((d) => <path class="shoe" d={d} />)}
+          <path class="jacket" d={C.FULL_JACKET} />
+          <path class="shirtw" d={C.FULL_SHIRT_V} />
+          <path class="tie" d={C.FULL_TIE} />
+          <path class="tie" d={C.TIE_KNOT} />
+          {C.SHIRT_COLLAR.map((d) => <path class="shirtw" d={d} />)}
+          {C.FULL_LAPELS.map((d) => <path class="lapel" d={d} />)}
+          <path class="shirtw" d={C.POCKET} />
+          {C.BUTTONS.map(([cx, cy]) => <circle class="button" cx={cx} cy={cy} r="7" />)}
+          <path class="line" d="M114 784 L300 806 L486 784" />
+
+          <g class="arm-left">
+            <path class="jacket" d={C.ARM_DOWN[1]!.sleeve} />
+            <path class="shirtw" d={C.ARM_DOWN[1]!.cuff} />
+            <ellipse class="skin" cx={C.ARM_DOWN[1]!.hand[0]} cy={C.ARM_DOWN[1]!.hand[1]} rx="22" ry="26" />
+          </g>
+
+          <path class="skin" d={C.NECK} />
+          <g class="head">
+            {C.EARS.map(([cx, cy]) => <ellipse class="skin" cx={cx} cy={cy} rx="12" ry="24" />)}
+            <path class="skin" d={C.HEAD} />
+            <path class="beard" d={C.BEARD} />
+            <path class="hair" d={C.HAIR} />
+            {C.TEMPLES.map((d) => <path class="grey" d={d} />)}
+            <path class="line part" d={C.PART} />
+            {C.BROWS.map((d, i) => <path class:list={['line', 'brow', i ? 'brow-r' : 'brow-l']} d={d} />)}
+            {C.EYES.map(([cx, cy]) => <ellipse class="eye" cx={cx} cy={cy} rx="12" ry="9" />)}
+            <g class="pupils">{C.EYES.map(([cx, cy]) => <circle class="ink" cx={cx} cy={cy + 1} r="5" />)}</g>
+            {C.LENSES.map((l) => <rect class="lens" x={l.x} y={l.y} width="56" height="38" rx="13" />)}
+            <path class="line" d={C.BRIDGE} />
+            {C.GLASS_ARMS.map((d) => <path class="line" d={d} />)}
+            <path class="line" d={C.NOSE} />
+            {C.CHEEKS.map(([cx, cy]) => <ellipse class="cheek" cx={cx} cy={cy} rx="13" ry="7" />)}
+            <path class="moustache" d={C.MOUSTACHE} />
+            <path class="line mouth" d={mouthAt(0, 0.35)} />
+          </g>
+
+          <g class="arm-think">
+            <path class="jacket" d={C.THINK_UPPER} />
+            <path class="jacket" d={C.THINK_FORE} />
+            <path class="shirtw" d={C.THINK_CUFF} />
+            <ellipse class="skin" cx={C.THINK_HAND[0]} cy={C.THINK_HAND[1]} rx="26" ry="22" />
+          </g>
+        </svg>
+      </div>
+    </figure>
+  </div>
+</article>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-nf-ask]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelector<HTMLButtonElement>('[data-miftah-fab]')?.click();
+    });
+  });
+</script>
+
+<style>
+  .nf {
+    min-height: calc(100svh - 120px);
+    padding: clamp(100px, 14vw, 140px) var(--gutter) 48px;
+    background:
+      radial-gradient(ellipse 70% 50% at 85% 30%, var(--accent-soft) 0%, transparent 55%),
+      var(--page);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 32px 48px;
+    align-items: center;
+  }
+
+  .title {
+    max-width: 12ch;
+    font: 400 clamp(36px, 5vw, 58px) / 1.05 var(--serif);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  .lead {
+    max-width: 34rem;
+    margin-top: 16px;
+    color: var(--ink-soft);
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .or {
+    margin-top: 28px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    max-width: 520px;
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--ink);
+    font: 400 18px/1.2 var(--serif);
+  }
+
+  .links i {
+    color: var(--accent);
+    font-style: normal;
+    transition: translate 0.3s var(--ease);
+  }
+
+  .links a:hover i {
+    translate: 4px 0;
+  }
+
+  /* the big outlined numeral behind the headline */
+  .copy {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .big {
+    position: absolute;
+    left: -0.06em;
+    top: -0.42em;
+    z-index: -1;
+    color: transparent;
+    font: 400 clamp(170px, 22vw, 300px) / 1 var(--serif);
+    letter-spacing: -0.04em;
+    -webkit-text-stroke: 2px var(--accent-line);
+    opacity: 0.7;
+    animation: big-float 7s ease-in-out infinite;
+    user-select: none;
+  }
+
+  @keyframes big-float {
+    50% {
+      translate: 0 -8px;
+    }
+  }
+
+  /* he looks around, searching for the page */
+  .figure .head {
+    transform-box: view-box;
+    transform-origin: 300px 430px;
+    animation: look-around 5.5s ease-in-out infinite;
+  }
+
+  .figure .pupils {
+    animation: pupils-around 5.5s ease-in-out infinite;
+  }
+
+  @keyframes look-around {
+    0%,
+    100% {
+      rotate: 0deg;
+    }
+    25% {
+      rotate: -5deg;
+    }
+    60% {
+      rotate: 4deg;
+    }
+  }
+
+  @keyframes pupils-around {
+    0%,
+    100% {
+      translate: 0 -2px;
+    }
+    25% {
+      translate: -5px -1px;
+    }
+    60% {
+      translate: 5px -1px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .big,
+    .figure .head,
+    .figure .pupils {
+      animation: none;
+    }
+  }
+
+  .miftah {
+    position: relative;
+    isolation: isolate;
+    margin: 0;
+    justify-self: center;
+    width: min(100%, 380px);
+  }
+
+  .bubble {
+    position: absolute;
+    z-index: 2;
+    top: -4%;
+    right: -14%;
+    max-width: 220px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 16px 16px 4px 16px;
+    background: var(--white);
+    box-shadow: 6px 6px 0 var(--accent-soft);
+    color: var(--ink);
+    font: 400 15px/1.45 var(--serif);
+  }
+
+  .bubble::after {
+    content: '';
+    position: absolute;
+    left: 22px;
+    bottom: -10px;
+    width: 16px;
+    height: 16px;
+    border-right: 1.5px solid var(--il-stroke);
+    border-bottom: 1.5px solid var(--il-stroke);
+    background: var(--white);
+    transform: rotate(45deg);
+  }
+
+  .figure {
+    width: 100%;
+  }
+
+  .figure svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .floor {
+    fill: var(--accent-soft);
+    opacity: 0.55;
+  }
+
+  /* same colours as the guide on the homepage */
+  .skin {
+    fill: #ecc9a3;
+    stroke: var(--il-stroke);
+    stroke-width: 2;
+  }
+
+  .hair,
+  .moustache {
+    fill: #4f5468;
+  }
+
+  .beard {
+    fill: #8a8f9f;
+    opacity: 0.45;
+  }
+
+  .grey {
+    fill: var(--il-slate);
+  }
+
+  .jacket {
+    fill: #1d2140;
+    stroke: var(--il-stroke);
+    stroke-width: 2;
+  }
+
+  .lapel {
+    fill: #2a2f52;
+    stroke: var(--il-stroke);
+    stroke-width: 1.5;
+  }
+
+  .shirtw {
+    fill: var(--white);
+    stroke: var(--il-stroke);
+    stroke-width: 1.5;
+  }
+
+  .tie {
+    fill: var(--accent);
+    stroke: var(--il-stroke);
+    stroke-width: 1.5;
+  }
+
+  .trousers {
+    fill: #2a2f52;
+    stroke: var(--il-stroke);
+    stroke-width: 2;
+  }
+
+  .shoe {
+    fill: var(--il-stroke);
+  }
+
+  .button {
+    fill: var(--il-amber);
+    stroke: var(--il-stroke);
+    stroke-width: 1.5;
+  }
+
+  .eye {
+    fill: var(--white);
+    stroke: var(--il-stroke);
+    stroke-width: 1.5;
+  }
+
+  .ink {
+    fill: var(--il-stroke);
+  }
+
+  .lens {
+    fill: rgba(201, 204, 246, 0.35);
+    stroke: var(--il-stroke);
+    stroke-width: 1.5;
+  }
+
+  .cheek {
+    fill: #f0b46e;
+    opacity: 0.35;
+  }
+
+  .line {
+    fill: none;
+    stroke: var(--il-stroke);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    /* phones: the message and the way back first, Miftah after */
+    .miftah {
+      width: min(70%, 240px);
+      margin-top: 12px;
+    }
+
+    .big {
+      font-size: 150px;
+      top: -0.3em;
+    }
+
+    .links {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .bubble {
+      top: -6%;
+      right: -30%;
+      max-width: 180px;
+      font-size: 14px;
+    }
+  }
+</style>

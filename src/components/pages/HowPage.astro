@@ -1,0 +1,212 @@
+---
+import PageHero from '../PageHero.astro';
+import PageCta from '../PageCta.astro';
+import { dict, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const p = dict(locale).pages.how;
+const how = dict(locale).how;
+const day = dict(locale).day;
+---
+
+<article class="hp">
+  <PageHero symbol="how" eyebrow={p.eyebrow} title={p.title} lead={p.lead} />
+
+  <section class="sec steps" aria-labelledby="steps-title">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <h2 class="h2" id="steps-title">{p.stepsTitle}</h2>
+        <p class="lede">{p.stepsLead}</p>
+      </div>
+      <ol class="big-steps" data-rail>
+        {
+          how.steps.map((s, i) => (
+            <li class="glow" data-reveal="left" style={`--d:${i * 90}ms`}>
+              <div class="top">
+                <span class="idx">0{i + 1}</span>
+                <h3>{s.title}</h3>
+              </div>
+              <p>{s.body}</p>
+              <ul>
+                {s.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec day" aria-labelledby="day-title">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <h2 class="h2" id="day-title">{p.dayTitle}</h2>
+        <p class="lede">{p.dayLead} <span class="tag">{day.example}</span></p>
+      </div>
+      <ol class="moments">
+        {
+          day.events.map((e, i) => (
+            <li data-reveal="right" style={`--d:${i * 60}ms`}>
+              <time>{e.time}</time>
+              <div>
+                <h3>{e.title}</h3>
+                <p>{e.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec after" aria-labelledby="after-title">
+    <div class="wrap card glow" data-reveal="zoom">
+      <h2 class="h2" id="after-title">{p.afterTitle}</h2>
+      <p class="lede wide">{p.afterBody}</p>
+    </div>
+  </section>
+
+  <PageCta locale={locale} />
+</article>
+
+<style>
+  .sec-head {
+    margin-bottom: 36px;
+  }
+
+  .big-steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 18px;
+  }
+
+  .big-steps li {
+    padding: clamp(28px, 4vw, 40px);
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background: var(--panel);
+  }
+
+  .top {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .idx {
+    color: var(--accent);
+    font: italic 400 40px/1 var(--serif);
+  }
+
+  .big-steps h3 {
+    font-size: clamp(28px, 3.5vw, 36px);
+  }
+
+  .big-steps > li > p {
+    margin-top: 14px;
+    max-width: 46rem;
+    color: var(--ink-soft);
+    font-size: 17.5px;
+    line-height: 1.65;
+  }
+
+  .big-steps ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .big-steps ul li {
+    padding: 8px 12px;
+    border: 1px dashed var(--line);
+    border-radius: 999px;
+    background: var(--white);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  .day {
+    background: var(--panel);
+    border-block: 1px solid var(--rule);
+  }
+
+  .tag {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 3px 8px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--muted);
+    font: 600 11px/1 var(--sans);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+
+  .moments {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1.5px solid var(--accent-line);
+  }
+
+  .moments li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 20px;
+    padding: 22px 0 22px 32px;
+  }
+
+  .moments li::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 30px;
+    width: 9px;
+    height: 9px;
+    border: 1.5px solid var(--il-stroke);
+    border-radius: 50%;
+    background: var(--il-amber);
+  }
+
+  .moments time {
+    color: var(--accent-deep);
+    font: 600 14px/1.2 var(--sans);
+  }
+
+  .moments h3 {
+    font-size: 24px;
+  }
+
+  .moments p {
+    margin-top: 6px;
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .after .card {
+    padding: clamp(28px, 4vw, 40px);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: var(--white);
+    box-shadow: 8px 8px 0 var(--accent-soft);
+  }
+
+  .lede.wide {
+    max-width: 40rem;
+    font-size: 18px;
+  }
+</style>

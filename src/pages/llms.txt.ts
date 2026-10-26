@@ -17,7 +17,7 @@ export const GET: APIRoute = () => {
 
 ${en.faq.items[0]?.a ?? ''}
 
-Hostay is built in Morocco, for Moroccan short-stay rentals, from Tangier to Agadir. It is coming soon.
+Hostay is built in Morocco, for short-stay rentals across the country. It is coming soon.
 
 ## Content
 

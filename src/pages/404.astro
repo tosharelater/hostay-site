@@ -1,0 +1,49 @@
+---
+/**
+ * Custom 404 — Hostay chrome + Miftah. Locale guessed from the requested path (/en/…).
+ */
+import '../styles/global.css';
+import '../styles/transitions.css';
+import '../styles/subpage.css';
+import { href, abs } from '../lib/paths';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Miftah from '../components/Miftah.astro';
+import NotFoundPage from '../components/pages/NotFoundPage.astro';
+import { dict, META, LOCALES, type Locale } from '../i18n';
+
+const path = Astro.url.pathname;
+const locale: Locale = path === '/en' || path.startsWith('/en/') ? 'en' : 'fr';
+const t = dict(locale);
+const n = t.notFound;
+const home = META[locale].home;
+---
+
+<!doctype html>
+<html lang={META[locale].lang} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{n.metaTitle}</title>
+    <meta name="description" content={n.metaDescription} />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={abs(home)} />
+    {LOCALES.map((l) => <link rel="alternate" hreflang={META[l].lang} href={abs(META[l].home)} />)}
+    <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
+    <meta name="theme-color" content="#ecf1fa" />
+    <script is:inline>document.documentElement.classList.remove('no-js');</script>
+  </head>
+  <body class="subpage not-found">
+    <a class="skip" href="#main">{t.a11y.skip}</a>
+    <Header locale={locale} />
+    <main id="main" tabindex="-1" transition:name="page-main">
+      <NotFoundPage locale={locale} />
+    </main>
+    <Footer locale={locale} />
+    <Miftah locale={locale} forceShow />
+    <script>
+      import '../scripts/motion';
+      import '../scripts/subpage';
+    </script>
+  </body>
+</html>

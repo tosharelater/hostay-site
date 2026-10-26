@@ -12,9 +12,11 @@
     "menuClose": "Fermer le menu"
   },
   "nav": {
+    "home": "Accueil",
     "modules": "Fonctionnalités",
     "how": "Comment ça marche",
     "who": "Pour qui",
+    "morocco": "Maroc",
     "faq": "FAQ",
     "signIn": "Se connecter",
     "notify": "Rester informé"
@@ -189,10 +191,10 @@
   "morocco": {
     "eyebrow": "Fait au Maroc",
     "title": "Au Maroc. Par des Marocains, pour des Marocains.",
-    "lead": "Pensé pour la réalité de la location courte durée au Maroc, de Tanger à Agadir.",
+    "lead": "Pensé pour la réalité de la location courte durée, partout au Maroc.",
     "atlantic": "Océan Atlantique",
     "med": "Mer Méditerranée",
-    "route": "De Tanger à Agadir"
+    "tagline": "Partout au Maroc"
   },
   "faq": {
     "eyebrow": "Questions",
@@ -268,7 +270,7 @@
       "owners": "Vos propriétaires ont de la visibilité sur ce qui compte, et vous gardez le contrôle.",
       "price": "Les tarifs ne sont pas encore publiés. Laissez votre e-mail dans « Restez informé » : nous vous écrirons à l'ouverture.",
       "launch": "Hostay arrive bientôt au Maroc. Laissez votre e-mail dans « Restez informé » pour être prévenu.",
-      "morocco": "Hostay est pensé au Maroc, pour la réalité de la location courte durée, de Tanger à Agadir.",
+      "morocco": "Hostay est pensé au Maroc, pour la réalité de la location courte durée, partout dans le pays.",
       "size": "Hostay s'adapte, de quelques logements à un portefeuille complet.",
       "fallback": "Bonne question ! Dans cette démo, je réponds sur les réservations, les voyageurs, les accès, les ménages, les propriétaires et le lancement. Essayez l'une des suggestions."
     }
@@ -276,7 +278,7 @@
   "day": {
     "eyebrow": "Une journée avec Hostay",
     "title": "Une journée de rotation, sans courir partout.",
-    "lead": "Exemple : un riad à Marrakech, un voyageur qui part, un autre qui arrive.",
+    "lead": "Exemple : un riad, un voyageur qui part, un autre qui arrive.",
     "example": "Journée d'exemple",
     "events": [
       {
@@ -319,7 +321,220 @@
     "morocco": "Fait au Maroc",
     "faq": "Questions fréquentes",
     "contact": "Lancement et contact",
-    "contactBody": "Hostay est bientôt disponible au Maroc. Pour être prévenu à l'ouverture, laissez votre e-mail sur la page d'accueil. Les clients existants se connectent sur",
-    "cities": "Villes"
+    "contactBody": "Hostay est bientôt disponible au Maroc. Pour être prévenu à l'ouverture, laissez votre e-mail sur la page d'accueil. Les clients existants se connectent sur"
+  },
+  "notFound": {
+    "metaTitle": "Page introuvable · Hostay",
+    "metaDescription": "Cette page n'existe pas. Revenez à l'accueil Hostay, ou demandez le chemin à Miftah.",
+    "eyebrow": "404",
+    "title": "Cette page a pris la clé.",
+    "lead": "L'adresse n'existe pas — ou plus. Miftah peut vous remettre sur le chemin.",
+    "bubble": "Hmm… je ne trouve pas cette page. Essayons l'accueil, ou posez-moi une question.",
+    "home": "Retour à l'accueil",
+    "ask": "Parler à Miftah",
+    "linksLabel": "Ou allez ici"
+  },
+  "pages": {
+    "product": {
+      "eyebrow": "Produit",
+      "title": "Tout le métier, sur une seule plateforme.",
+      "lead": "Réservations, voyageurs, accès, opérations, tableaux de bord, Tuya et propriétaires — sept modules qui se passent le relais, sans tableur ni groupe WhatsApp.",
+      "introTitle": "Ce que Hostay remplace",
+      "introBody": "Calendriers éparpillés, messages qui se croisent, codes d'accès dans un carnet, ménages sur un autre outil. Hostay range tout au même endroit, pour que l'équipe voie la même chose.",
+      "promises": [
+        {
+          "title": "Un planning",
+          "body": "iCal et saisies manuelles dans une seule vue."
+        },
+        {
+          "title": "Un fil voyageur",
+          "body": "Infos validées, espace dédié, accès au logement."
+        },
+        {
+          "title": "Une équipe",
+          "body": "Check-ins, ménages et interventions partagés."
+        }
+      ],
+      "modulesTitle": "Les sept modules",
+      "modulesLead": "Chacun fait un métier précis. Ensemble, ils couvrent la journée de rotation.",
+      "details": [
+        "Synchronisez vos annonces et ajoutez le reste à la main : un planning unique, lisible pour toute l'équipe.",
+        "Les voyageurs renseignent leurs informations ; Hostay les valide sans relance de votre part.",
+        "Guide du logement, consignes et accès : le voyageur a son espace, vous gardez la main.",
+        "Check-ins, check-outs, ménages et interventions : une file claire pour le terrain.",
+        "Occupation, activité, points de tension : des indicateurs pour décider sans tableur.",
+        "Serrures, clim et capteurs Tuya pilotés depuis Hostay, au moment où il faut.",
+        "Les propriétaires voient ce qui compte ; la gestion reste entre vos mains."
+      ],
+      "flowTitle": "Du calendrier au propriétaire",
+      "flowLead": "Trois temps pour poser Hostay, du premier logement à un portefeuille complet.",
+      "scheduleTitle": "Le planning, en un coup d'œil",
+      "scheduleLead": "Toutes les réservations, d'où qu'elles viennent, dans un seul planning — données d'exemple ci-dessous."
+    },
+    "about": {
+      "eyebrow": "Pour qui",
+      "title": "Trois métiers. Une même plateforme.",
+      "lead": "Conciergeries, gestionnaires et propriétaires ne font pas le même travail — Hostay leur donne une base commune, sans diluer le contrôle.",
+      "missionTitle": "Pourquoi Hostay existe",
+      "missionBody": "La location courte durée au Maroc mérite mieux qu'un empilement d'outils. Hostay est pensé ici, pour coller à la réalité du terrain : rotations serrées, équipes mixtes, propriétaires à tenir informés.",
+      "audiencesTitle": "À qui s'adresse Hostay",
+      "audiences": [
+        {
+          "title": "Conciergeries",
+          "body": "Du planning au terrain, toute l'équipe partage la même vue. Les propriétaires ont de la visibilité ; vous gardez la main sur les opérations.",
+          "points": [
+            "Planning partagé",
+            "File d'opérations",
+            "Visibilité propriétaires"
+          ]
+        },
+        {
+          "title": "Gestionnaires",
+          "body": "De quelques logements à un portefeuille complet : un planning, des voyageurs accueillis, des équipements connectés quand vous en avez besoin.",
+          "points": [
+            "iCal + manuel",
+            "Espace voyageur",
+            "Tuya optionnel"
+          ]
+        },
+        {
+          "title": "Propriétaires",
+          "body": "Suivre son logement et son activité sans porter le quotidien. La gestion reste chez la conciergerie ou le gestionnaire.",
+          "points": [
+            "Vue claire",
+            "Sans micro-gestion",
+            "Confiance"
+          ]
+        }
+      ],
+      "principlesTitle": "Ce que nous refusons",
+      "principles": [
+        {
+          "title": "L'outil unique qui ne relie rien",
+          "body": "Une appli par tâche finit toujours par se contredire."
+        },
+        {
+          "title": "La boîte noire pour les propriétaires",
+          "body": "Ils ont besoin de voir, pas de tout piloter."
+        },
+        {
+          "title": "Le copier-coller de Silicon Valley",
+          "body": "Hostay est fait pour le Maroc, pas l'inverse."
+        }
+      ]
+    },
+    "morocco": {
+      "eyebrow": "Fait au Maroc",
+      "title": "Au Maroc. Par des Marocains, pour des Marocains.",
+      "lead": "Du nord au sud, la location courte durée a ses propres rythmes. Hostay est conçu pour le Maroc, pas pour un autre marché.",
+      "manifestoTitle": "Pensé pour le terrain",
+      "manifestoBody": "Rotations, clim, accès, équipes sur WhatsApp, propriétaires à rassurer : ce n'est pas un détail. C'est le métier. Hostay part de là.",
+      "pillars": [
+        {
+          "title": "Langue et usages",
+          "body": "Une interface claire en français, pour des équipes qui tournent vite."
+        },
+        {
+          "title": "Réseaux et accès",
+          "body": "iCal, saisie manuelle, Tuya : ce que le marché utilise déjà."
+        },
+        {
+          "title": "Confiance locale",
+          "body": "Construit ici, avec le souci du propriétaire et du voyageur."
+        }
+      ],
+      "countryTitle": "Tout le Maroc, une seule plateforme",
+      "countryLead": "Où que se trouvent vos logements au Maroc, ils se gèrent au même endroit, avec la même équipe et le même planning.",
+      "points": [
+        {
+          "title": "Du nord au sud",
+          "body": "Une même plateforme, quel que soit l'endroit où se trouvent vos logements."
+        },
+        {
+          "title": "De la côte à l'intérieur",
+          "body": "Riads, appartements, villas : chaque logement trouve sa place dans le même planning."
+        },
+        {
+          "title": "Pensé ici",
+          "body": "Conçu au Maroc, avec la réalité du terrain en tête."
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "Questions",
+      "title": "Les réponses, sans détour.",
+      "lead": "Produit, lancement, réservations, Tuya, propriétaires, taille du parc — ce que l'on nous demande le plus.",
+      "groups": [
+        {
+          "title": "Produit",
+          "items": [
+            {
+              "q": "Qu'est-ce que Hostay ?",
+              "a": "Une plateforme tout-en-un pour les conciergeries, les gestionnaires et les propriétaires de locations courte durée : réservations, informations voyageurs, espace voyageur, opérations, tableaux de bord, équipements connectés Tuya et visibilité propriétaires."
+            },
+            {
+              "q": "Hostay convient-il à un petit nombre de logements ?",
+              "a": "Oui. Hostay s'adapte, de quelques logements à un portefeuille complet."
+            },
+            {
+              "q": "Faut-il tout brancher le premier jour ?",
+              "a": "Non. Vous pouvez commencer par le planning et les voyageurs, puis ajouter opérations, tableaux de bord ou Tuya quand vous êtes prêts."
+            }
+          ]
+        },
+        {
+          "title": "Réservations et voyageurs",
+          "items": [
+            {
+              "q": "Comment arrivent les réservations ?",
+              "a": "Par synchronisation des calendriers iCal de vos annonces, ou en saisie manuelle pour les réservations directes."
+            },
+            {
+              "q": "Que contient l'espace voyageur ?",
+              "a": "Le guide du logement et l'accès au logement, dans un espace dédié — sans multiplier les messages."
+            }
+          ]
+        },
+        {
+          "title": "Équipements et propriétaires",
+          "items": [
+            {
+              "q": "Quels équipements connectés sont pris en charge ?",
+              "a": "Hostay s'intègre à l'écosystème Tuya : serrures, climatisation et capteurs."
+            },
+            {
+              "q": "Que voient les propriétaires ?",
+              "a": "Ils ont de la visibilité sur leurs logements. La gestion reste entre vos mains."
+            }
+          ]
+        },
+        {
+          "title": "Lancement",
+          "items": [
+            {
+              "q": "Quand Hostay sera-t-il disponible ?",
+              "a": "Bientôt, d'abord au Maroc. Laissez votre e-mail pour être prévenu à l'ouverture."
+            },
+            {
+              "q": "Les tarifs sont-ils déjà publiés ?",
+              "a": "Pas encore. Inscrivez-vous à « Rester informé » : nous vous écrirons à l'ouverture."
+            }
+          ]
+        }
+      ],
+      "search": "Rechercher une question…",
+      "empty": "Aucune question ne correspond. Essayez un autre mot, ou posez-la à Miftah."
+    },
+    "how": {
+      "eyebrow": "Comment ça marche",
+      "title": "Trois temps, de la réservation au propriétaire.",
+      "lead": "Centraliser, accueillir, piloter — une séquence simple pour poser Hostay sans tout changer du jour au lendemain.",
+      "stepsTitle": "La séquence",
+      "stepsLead": "Chaque étape débloque la suivante. Vous avancez au rythme de votre parc.",
+      "dayTitle": "Une journée de rotation",
+      "dayLead": "Exemple : un riad, un voyageur qui part, un autre qui arrive — sans courir partout.",
+      "afterTitle": "Ensuite",
+      "afterBody": "Une fois le fil en place, les modules se branchent : tableaux de bord, Tuya, visibilité propriétaires. Le cœur reste le même planning."
+    }
   }
 }

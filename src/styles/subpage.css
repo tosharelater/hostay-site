@@ -1,0 +1,194 @@
+/*
+ * Motion and interaction shared by the standalone pages (Produit, Comment ça marche, Pour qui,
+ * Maroc, FAQ). Driven by scripts/subpage.ts; everything degrades to static content.
+ */
+
+/* reading progress, just under the header */
+.read-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: 3px;
+  background: linear-gradient(90deg, var(--il-indigo), var(--accent));
+  transform-origin: left;
+  scale: var(--read, 0) 1;
+  pointer-events: none;
+}
+
+/* directional reveals */
+.subpage [data-reveal='left'] {
+  transform: translateX(-40px);
+}
+
+.subpage [data-reveal='right'] {
+  transform: translateX(40px);
+}
+
+.subpage [data-reveal='zoom'] {
+  transform: scale(0.94);
+}
+
+.subpage [data-reveal].in {
+  transform: none;
+}
+
+/* section titles: a dashed underline draws itself once the title is in view */
+.subpage .sec .h2::after {
+  content: '';
+  display: block;
+  width: 72px;
+  margin-top: 14px;
+  border-top: 2px dashed var(--accent-line);
+  transform-origin: left;
+  scale: 0 1;
+  transition: scale 0.9s 0.25s var(--ease);
+}
+
+.subpage .in .h2::after,
+.subpage .h2.in::after {
+  scale: 1 1;
+}
+
+/* cards: a soft light follows the pointer, the card lifts, its art floats */
+.glow {
+  position: relative;
+  isolation: isolate;
+  transition:
+    translate 0.45s var(--ease),
+    box-shadow 0.45s var(--ease),
+    border-color 0.3s ease,
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
+  /* keep the reveal stagger (the shorthand above would reset it) */
+  transition-delay: 0s, 0s, 0s, var(--d, 0ms), var(--d, 0ms);
+}
+
+.glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgba(169, 173, 240, 0.32), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .glow:hover {
+    translate: 0 -4px;
+    border-color: var(--accent-line);
+    box-shadow: 8px 10px 0 var(--accent-soft);
+  }
+
+  .glow:hover::before {
+    opacity: 1;
+  }
+
+  .glow:hover .art {
+    animation: art-float 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes art-float {
+  50% {
+    translate: 0 -6px;
+  }
+}
+
+/* step lists: a rail on the left fills as you scroll through them */
+[data-rail] {
+  position: relative;
+  --rail: 0;
+}
+
+[data-rail]::before,
+[data-rail]::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: -26px;
+  width: 2px;
+  border-radius: 2px;
+}
+
+[data-rail]::before {
+  background: var(--rule);
+}
+
+[data-rail]::after {
+  background: linear-gradient(180deg, var(--il-indigo), var(--accent));
+  transform-origin: top;
+  scale: 1 var(--rail);
+}
+
+@media (max-width: 860px) {
+  [data-rail]::before,
+  [data-rail]::after {
+    left: -12px;
+  }
+}
+
+[data-rail] {
+  margin-left: 28px;
+}
+
+@media (max-width: 860px) {
+  [data-rail] {
+    margin-left: 14px;
+  }
+}
+
+/* product schedule: bookings slide in one after another, "today" glows */
+.subpage .window .bar {
+  transform-origin: left;
+  scale: 0 1;
+  transition: scale 0.7s var(--ease);
+  transition-delay: calc(0.35s + var(--b, 0) * 0.09s);
+}
+
+.subpage .window.in .bar {
+  scale: 1 1;
+}
+
+.subpage .window .now {
+  animation: now-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes now-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* hero illustration leans toward the pointer */
+.subpage .ph .visual {
+  transform: perspective(900px) rotateX(var(--ry, 0deg)) rotateY(var(--rx, 0deg));
+  transition: transform 0.4s var(--ease);
+}
+
+/* FAQ: answers open and close smoothly (height set by script) */
+.subpage details > .answer {
+  overflow: hidden;
+  transition: height 0.4s var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .read-progress {
+    display: none;
+  }
+
+  .subpage [data-reveal='left'],
+  .subpage [data-reveal='right'],
+  .subpage [data-reveal='zoom'] {
+    transform: none;
+  }
+
+  .glow,
+  .subpage .ph .visual {
+    transition: none;
+    transform: none;
+  }
+}

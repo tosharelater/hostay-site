@@ -13,12 +13,14 @@ import { mouthAt } from '../lib/untangle';
 
 interface Props {
   locale: Locale;
+  /** Show the FAB immediately (e.g. 404) instead of waiting for the home guide exit. */
+  forceShow?: boolean;
 }
-const { locale } = Astro.props;
+const { locale, forceShow = false } = Astro.props;
 const t = dict(locale).miftah;
 ---
 
-<button type="button" class="fab" data-miftah-fab aria-haspopup="dialog" aria-controls="miftah" aria-label={t.open}>
+<button type="button" class:list={['fab', forceShow && 'show']} data-miftah-fab aria-haspopup="dialog" aria-controls="miftah" aria-label={t.open}>
   <span class="face" aria-hidden="true">
     <svg viewBox="150 70 300 360">
       <path class="skin" d={C.HEAD} />
@@ -155,7 +157,7 @@ const t = dict(locale).miftah;
       ['reservations', ['ical', 'calendrier', 'reservation', 'planning', 'booking', 'calendar', 'schedule', 'airbnb']],
       ['owners', ['proprietaire', 'owner', 'rapport', 'report', 'visibilite', 'visibility']],
       ['size', ['combien', 'logements', 'portefeuille', 'portfolio', 'how many', 'properties']],
-      ['morocco', ['maroc', 'morocco', 'ville', 'city', 'tanger', 'tangier', 'agadir', 'marrakech', 'casablanca']],
+      ['morocco', ['maroc', 'morocco', 'marocain', 'moroccan', 'pays', 'country', 'region', 'ville', 'city']],
       ['hello', ['bonjour', 'salut', 'salam', 'coucou', 'hello', 'hi', 'hey']]
     ];
     const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');

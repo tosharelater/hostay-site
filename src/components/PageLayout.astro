@@ -1,0 +1,63 @@
+---
+/**
+ * Shared chrome for non-home marketing pages. Home keeps HomeView + hash nav unchanged.
+ */
+import '../styles/global.css';
+import '../styles/transitions.css';
+import '../styles/subpage.css';
+import { href, abs } from '../lib/paths';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import { dict, META, LOCALES, type Locale } from '../i18n';
+import { pageDescription, pageLocaleHrefs, pagePath, pageTitle, type PageId } from '../lib/pages';
+
+interface Props {
+  locale: Locale;
+  page: PageId;
+}
+const { locale, page } = Astro.props;
+const t = dict(locale);
+const path = pagePath(page, locale);
+const canonical = abs(path);
+const ogImage = abs('/og.png');
+const title = pageTitle(page, locale);
+const description = pageDescription(page, locale);
+const localeHrefs = pageLocaleHrefs(page);
+---
+
+<!doctype html>
+<html lang={META[locale].lang} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {LOCALES.map((l) => <link rel="alternate" hreflang={META[l].lang} href={abs(pagePath(page, l))} />)}
+    <link rel="alternate" hreflang="x-default" href={abs(pagePath(page, 'fr'))} />
+    <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
+    <meta name="theme-color" content="#ecf1fa" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Hostay" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={META[locale].og} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="text/html" href={abs(META[locale].text)} title={t.text.label} />
+    <script is:inline>document.documentElement.classList.remove('no-js');</script>
+  </head>
+  <body class="subpage">
+    <a class="skip" href="#main">{t.a11y.skip}</a>
+    <Header locale={locale} localeHrefs={localeHrefs} currentPath={href(path)} />
+    <main id="main" tabindex="-1" transition:name="page-main">
+      <slot />
+    </main>
+    <Footer locale={locale} localeHrefs={localeHrefs} />
+    <script>
+      import '../scripts/motion';
+      import '../scripts/subpage';
+    </script>
+  </body>
+</html>

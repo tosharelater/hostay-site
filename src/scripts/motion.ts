@@ -4,7 +4,14 @@
  * and the features scroll around him), the story scrub, and the "how it works" checklist.
  */
 import { mouthAt, phases } from '../lib/untangle';
-import { routeAt, MW, MH } from '../lib/map';
+
+/** Tear down listeners from an earlier run on this page so they do not stack. */
+type MotionWin = Window & { __hostayMotionAbort?: AbortController; __hostayRevealIO?: IntersectionObserver };
+const win = window as MotionWin;
+win.__hostayMotionAbort?.abort();
+win.__hostayRevealIO?.disconnect();
+const ac = new AbortController();
+win.__hostayMotionAbort = ac;
 
 const root = document.documentElement;
 root.classList.remove('no-js');
@@ -27,6 +34,7 @@ if (still || !('IntersectionObserver' in window)) {
     },
     { rootMargin: '0px 0px -12% 0px', threshold: 0.12 }
   );
+  win.__hostayRevealIO = io;
   reveals.forEach((el) => io.observe(el));
 }
 
@@ -181,29 +189,19 @@ function checklist(vh: number) {
   setup.classList.toggle('celebrate', done === steps.length);
 }
 
-/* ---------- Made in Morocco: the map comes in, then the route from Tangier to Agadir ---------- */
+/* ---------- Made in Morocco: the map of Morocco draws itself ---------- */
 
 const morocco = document.querySelector<HTMLElement>('[data-morocco]');
-const mapRoute = morocco?.querySelector<SVGPathElement>('[data-map-route]');
-const traveller = morocco?.querySelector<HTMLElement>('[data-map-traveller]');
-const cities = morocco ? [...morocco.querySelectorAll<HTMLElement>('[data-city]')] : [];
+const moroccoMap = morocco?.querySelector<HTMLElement>('.mmap');
 
 function journey(vh: number) {
-  if (!morocco || !mapRoute || !traveller) return;
+  if (!morocco || !moroccoMap) return;
   const r = morocco.getBoundingClientRect();
-  // pinned: entering draws the coast, then scrolling through runs the route
-  const k = still ? 1 : clamp01((vh - r.top) / (r.height * 0.95));
-  const coast = clamp01(k / 0.45);
-  const land = clamp01((k - 0.25) / 0.2);
-  const run = clamp01((k - 0.45) / 0.45);
-  morocco.style.setProperty('--coast-off', (1 - coast).toFixed(4));
-  morocco.style.setProperty('--land', land.toFixed(3));
-  morocco.style.setProperty('--route-off', (1 - run).toFixed(4));
-  morocco.style.setProperty('--trav', (land * (run < 1 ? 1 : 0.9)).toFixed(3));
-  const [x, y] = routeAt(run);
-  traveller.style.left = `${(x / MW) * 100}%`;
-  traveller.style.top = `${(y / MH) * 100}%`;
-  cities.forEach((c) => c.classList.toggle('on', land > 0.5 && Number(c.dataset.t) <= run + 0.001));
+  // pinned: the outline draws as it comes in, then the land fills and the name appears
+  const k = still ? 1 : clamp01((vh - r.top) / (r.height * 0.9));
+  moroccoMap.style.setProperty('--draw', clamp01(k / 0.55).toFixed(4));
+  moroccoMap.style.setProperty('--fill', clamp01((k - 0.4) / 0.25).toFixed(3));
+  moroccoMap.style.setProperty('--mark', clamp01((k - 0.6) / 0.2).toFixed(3));
 }
 
 /* ---------- A day with Hostay: the sun crosses the day ---------- */
@@ -287,8 +285,8 @@ const request = () => {
   ticking = true;
   requestAnimationFrame(frame);
 };
-addEventListener('scroll', request, { passive: true });
-addEventListener('resize', request);
+addEventListener('scroll', request, { passive: true, signal: ac.signal });
+addEventListener('resize', request, { signal: ac.signal });
 if (guide) {
   guide.classList.add('talking');
   hush = window.setTimeout(() => guide.classList.remove('talking'), 2400);
